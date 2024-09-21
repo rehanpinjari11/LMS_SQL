@@ -1,0 +1,1298 @@
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+                                                        CREATE TABLES
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+show databases;
+
+CREATE DATABASE LMS;
+
+USE LMS;
+
+CREATE TABLE User_Details (
+Id INT AUTO_INCREMENT NOT NULL,
+Email_Id VARCHAR(50),
+First_Name VARCHAR(50) NOT NULL,
+Last_Name VARCHAR(50) NOT NULL,
+Password VARCHAR(50),
+Contact_Number VARCHAR(10),
+Verified VARCHAR(50),
+Creator_Stamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+Creator_User INT NOT NULL,
+PRIMARY KEY (Id));
+
+
+
+CREATE TABLE Hired_Candidate (
+Id INT AUTO_INCREMENT NOT NULL,
+First_Name VARCHAR(50) NOT NULL,
+Middle_Name VARCHAR(50) NOT NULL,
+Last_Name VARCHAR(50) NOT NULL,
+Email_Id VARCHAR(50),
+Hired_City VARCHAR(50),
+Degree VARCHAR(50),
+Hired_Date DATE,
+Mobile_Number VARCHAR(50),
+Permanent_Pincode VARCHAR(10),
+Hired_Lab VARCHAR(50),
+Attitude VARCHAR(50),
+Communication_Remark VARCHAR(10),
+Knowledge_Remark VARCHAR(10),
+Aggregate_Remark VARCHAR(10),
+Status VARCHAR(10),
+Creator_Stamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+Creator_User INT NOT NULL,
+PRIMARY KEY (Id),
+FOREIGN KEY (Creator_User) REFERENCES User_Details(Id));
+
+
+
+CREATE TABLE Fellowship_Candidate (
+Id INT AUTO_INCREMENT NOT NULL,
+CIC_ID VARCHAR(50),
+First_Name VARCHAR(50) NOT NULL,
+Middle_Name VARCHAR(50) NOT NULL,
+Last_Name VARCHAR(50) NOT NULL,
+Email_Id VARCHAR(50),
+Hired_City VARCHAR(50),
+Degree VARCHAR(50),
+Hired_Date DATE,
+Mobile_Number VARCHAR(50),
+Permanent_Pincode VARCHAR(10),
+Hired_Lab VARCHAR(50),
+Attitude VARCHAR(50),
+Communication_Remark VARCHAR(10),
+Knowledge_Remark VARCHAR(10),
+Aggregate_Remark VARCHAR(10),
+Creator_Stamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+Creator_User INT NOT NULL,
+Birth_Date DATE,
+Is_Birth_Date_Verified boolean,
+Parent_Name VARCHAR(50),
+Parent_Occupation VARCHAR(50),
+Parent_Mobile_Number VARCHAR(50),
+Parent_Annual_Salary LONG,
+Local_Address VARCHAR(255),
+Permanent_Address VARCHAR(255),
+Photo_Path VARCHAR(50),
+Joining_Date DATE,
+Candidate_Status VARCHAR(30),
+Personal_INformation TEXT,
+Bank_Information TEXT,
+Education_Information VARCHAR(50),
+Document_Status VARCHAR(50),
+Remark VARCHAR(50),
+PRIMARY KEY (Id),
+FOREIGN KEY (Creator_User) REFERENCES User_Details(Id));
+
+
+
+CREATE TABLE Candidate_Bank_Details (
+Id INT AUTO_INCREMENT NOT NULL,
+Candidate_ID INT NOT NULL,
+Name VARCHAR(50),
+Account_Number VARCHAR(50),
+Is_Account_Number_Verified BOOLEAN,
+Ifsc_Code VARCHAR(50),
+Is_Ifsc_Code_Verified BOOLEAN,
+Pan_Number VARCHAR(20),
+Is_Pan_Number_Verified BOOLEAN,
+Adhar_Number VARCHAR(20),
+Is_Adhar_Number_Verified BOOLEAN,
+Creator_Stamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+Creator_User INT NOT NULL,
+PRIMARY KEY (Id),
+FOREIGN KEY (Creator_User) REFERENCES User_Details(Id),
+FOREIGN KEY (Candidate_ID) REFERENCES Fellowship_Candidate(Id));
+
+
+
+CREATE TABLE Candidate_Qualification (
+Id INT AUTO_INCREMENT NOT NULL,
+Candidate_ID INT NOT NULL,
+Diploma VARCHAR(50),
+Degree_Name VARCHAR(50),
+Is_Degree_Name_Verified BOOLEAN,
+Employee_Decipline VARCHAR(50),
+Is_Employee_Decipline_Verified BOOLEAN,
+Passing_Year INT,
+Is_Passing_Year_Verified BOOLEAN,
+Aggregate_Percentage VARCHAR(10),
+Is_Aggregate_Percentage_Verified BOOLEAN,
+Final_Year_percentage FLOAT,
+Is_Final_Year_percentage_Verified BOOLEAN,
+Training_Institute VARCHAR(100),
+Is_Training_Institute_Verified BOOLEAN,
+Training_Duration_Month VARCHAR(50),
+Is_Training_Duration_Month_Verified BOOLEAN,
+Other_Training VARCHAR(50),
+Is_Other_Training_Verified BOOLEAN,
+Creator_Stamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+Creator_User INT NOT NULL,
+PRIMARY KEY (Id),
+FOREIGN KEY (Creator_User) REFERENCES User_Details(Id),
+FOREIGN KEY (Candidate_ID) REFERENCES Fellowship_Candidate(Id));
+
+
+
+CREATE TABLE Candidate_Documents (
+Id INT AUTO_INCREMENT NOT NULL,
+Candidate_ID INT NOT NULL,
+Doc_Type VARCHAR(50),
+Doc_Path VARCHAR(50),
+Status VARCHAR(50),
+Creator_Stamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+Creator_User INT NOT NULL,
+PRIMARY KEY (Id),
+FOREIGN KEY (Creator_User) REFERENCES User_Details(Id),
+FOREIGN KEY (Candidate_ID) REFERENCES Fellowship_Candidate(Id));
+
+
+
+CREATE TABLE Company (
+Id INT AUTO_INCREMENT NOT NULL,
+Name VARCHAR(255),
+Address VARCHAR(100),
+Location VARCHAR(50),
+Status VARCHAR(50),
+Creator_Stamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+Creator_User INT NOT NULL,
+PRIMARY KEY (Id),
+FOREIGN KEY (Creator_User) REFERENCES User_Details(Id));
+
+
+
+CREATE TABLE Tech_Stack (
+Id INT NOT NULL,
+Tech_Name VARCHAR(100),
+Image_Path VARCHAR(100),
+Framework VARCHAR(20),
+Cur_Status VARCHAR(20),
+Creator_Stamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+Creator_User INT NOT NULL,
+PRIMARY KEY (Id),
+FOREIGN KEY (Creator_User) REFERENCES User_Details(Id));
+
+
+
+CREATE TABLE Tech_Type (Id INT NOT NULL,
+Type_Name VARCHAR(100),
+Cur_Status VARCHAR(20),
+Creator_Stamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+Creator_User INT NOT NULL,
+PRIMARY KEY (Id),
+FOREIGN KEY (Creator_User) REFERENCES User_Details(Id));
+
+
+
+CREATE TABLE Lab (Id INT NOT NULL,
+Name VARCHAR(100),
+Location VARCHAR(20),
+Address VARCHAR(100),
+Status VARCHAR(20),
+Creator_Stamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+Creator_User INT NOT NULL,
+PRIMARY KEY (Id),
+FOREIGN KEY (Creator_User) REFERENCES User_Details(Id));
+
+
+
+CREATE TABLE Lab_Threshold (Id INT NOT NULL,
+Lab_Id INT NOT NULL,
+Lab_Capacity INT,
+Lead_Threshold INT,
+Ideation_Engg_Threshold INT,
+Buddy_Engg_Threshold INT,
+Status VARCHAR(20),
+Creator_Stamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+Creator_User INT NOT NULL,
+PRIMARY KEY (Id),
+FOREIGN KEY (Creator_User) REFERENCES User_Details(Id),
+FOREIGN KEY (Lab_Id) REFERENCES Lab(Id));
+
+
+
+CREATE TABLE Maker_Program (
+Id INT AUTO_INCREMENT NOT NULL,
+Program_Name VARCHAR(50),
+Program_Type VARCHAR(50),
+Program_Link VARCHAR(100),
+Tech_Stack_Id INT NOT NULL,
+Tech_Type_Id INT NOT NULL,
+Is_Program_Approved BOOLEAN,
+Description VARCHAR(255),
+Status VARCHAR(50),
+Creator_Stamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+Creator_User INT NOT NULL,
+PRIMARY KEY (Id),
+FOREIGN KEY (Creator_User) REFERENCES User_Details(Id),
+FOREIGN KEY (Tech_Stack_Id) REFERENCES Tech_Stack(Id),
+FOREIGN KEY (Tech_Type_Id) REFERENCES Tech_Type(Id));
+
+
+
+CREATE TABLE App_Parameters (
+Id INT NOT NULL,
+Key_Type VARCHAR(50),
+Key_Value VARCHAR(20),
+Key_Text VARCHAR(20),
+Cur_Status VARCHAR(20),
+Lastupd_User VARCHAR(20),
+Lastupd_Stamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+Creator_Stamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+Creator_User INT NOT NULL,
+Seq_Num INT,
+PRIMARY KEY (Id),
+FOREIGN KEY (Creator_User) REFERENCES User_Details(Id));
+
+
+
+CREATE TABLE Mentor (
+Id INT NOT NULL,
+Name VARCHAR(50),
+Mentor_Type VARCHAR(20),
+Lab_Id INT NOT NULL,
+Status VARCHAR(20),
+Creator_Stamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+Creator_User INT NOT NULL,
+PRIMARY KEY (Id),
+FOREIGN KEY (Creator_User) REFERENCES User_Details(Id),
+FOREIGN KEY (Lab_Id) REFERENCES Lab(Id));
+
+
+
+CREATE TABLE Mentor_Ideation_Map (
+Id INT NOT NULL,
+Parent_Mentor_Id INT,
+Mentor_Id INT,
+Status VARCHAR(20),
+Creator_Stamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+Creator_User INT NOT NULL,
+PRIMARY KEY (Id),
+FOREIGN KEY (Creator_User) REFERENCES User_Details(Id),
+FOREIGN KEY (Parent_Mentor_Id) REFERENCES Mentor(Id),
+FOREIGN KEY (Mentor_Id) REFERENCES Mentor(Id));
+
+
+
+CREATE TABLE Mentor_Tech_Stack (
+Id INT NOT NULL,
+Mentor_Id INT,
+Tech_Stack_Id INT,
+Status VARCHAR(20),
+Creator_Stamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+Creator_User INT NOT NULL,
+PRIMARY KEY (Id),
+FOREIGN KEY (Creator_User) REFERENCES User_Details(Id),
+FOREIGN KEY (Tech_Stack_Id) REFERENCES Tech_Stack(Id),
+FOREIGN KEY (Mentor_Id) REFERENCES Mentor(Id));
+
+
+
+CREATE TABLE Company_Requirement (Id INT NOT NULL,
+Company_Id INT NOT NULL,
+Requested_Month DATE,
+City VARCHAR(20),
+Is_Doc_Verification BOOLEAN,
+Requirement_Doc_Path VARCHAR(50),
+No_Of_Engg INT,
+Tech_Stack_Id INT,
+Tech_Type_Id INT,
+Maker_Program_Id INT,
+Lead_Id INT,
+Ideation_Engg_Id INT,
+Buddy_Engg_Id INT,
+Special_Remark VARCHAR(20),
+Status VARCHAR(20),
+Creator_Stamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+Creator_User INT NOT NULL,
+PRIMARY KEY (Id),
+FOREIGN KEY (Creator_User) REFERENCES User_Details(Id),
+FOREIGN KEY (Company_Id) REFERENCES Company(Id),
+FOREIGN KEY (Tech_Stack_Id) REFERENCES Tech_Stack(Id),
+FOREIGN KEY (Tech_Type_Id) REFERENCES Tech_Type(Id),
+FOREIGN KEY (Maker_Program_Id) REFERENCES Maker_Program(Id),
+FOREIGN KEY (Lead_Id) REFERENCES Mentor(Id),
+FOREIGN KEY (Ideation_Engg_Id) REFERENCES Mentor_ideation_Map(Id),
+FOREIGN KEY (Buddy_Engg_Id) REFERENCES Mentor(Id));
+
+
+
+CREATE TABLE Candidate_Stack_Assignment (Id INT NOT NULL,
+Requirement_Id INT,
+Candidate_Id INT,
+Assign_Date DATE,
+Complete_Date DATE,
+Status VARCHAR(20),
+Creator_Stamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+Creator_User INT NOT NULL,
+PRIMARY KEY (Id),
+FOREIGN KEY (Creator_User) REFERENCES User_Details(Id),
+FOREIGN KEY (Requirement_Id) REFERENCES Company_Requirement(Id),
+FOREIGN KEY (Candidate_Id) REFERENCES Fellowship_Candidate(Id));
+
+
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+                                                                INSERT DATA INTO TABLES
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+INSERT INTO User_Details (Email_Id,First_Name,Last_Name,Password,Contact_Number,Verified,Creator_Stamp,Creator_User)
+VALUES
+("pinjarirehan07@gmail.com","Rehan","Pinjari","Rehan@11","8421620220","Verified",Now(),101),
+("sakshijadhav@gmail.com","Sakshi","Jadhav","Sakshi@285","9178654596","Verified",Now(),102),
+("sanketkalambaste@gmail.com","Sanket","Kalambaste","Sanket@123","9685743245","Not Verified",Now(),103),
+("vedantgujarati@gmail.com","Vedant","Gujarati","Ved@123","7098325648","Verified",Now(),104),
+("vaibhav15@gmail.com","Vaibhav","Kumbhar","VaibhavS@123","7078451296","Verified",Now(),105),
+("sayali@gmail.com","Sayali","Matale","Sayu@1999","8574968598","Verified",Now(),106),
+("sushmitapawar@gmail.com","Sushmita","Pawar","Pawar@2001","9884567845","Not Verified",Now(),107),
+("pratiksawant@gmail.com","Pratik","Sawant","Sawant@1998","9865457852","Not Verified",Now(),108),
+("akash@gmail.com","Akash","Patil","Ak47@1228","9857423899","Verified",Now(),109),
+("pranali@gmail.com","Pranali","Deware","Panu@123","9685789865","Not Verified",Now(),110),
+("tusharjadhav@gmail.com","Tushar","Jadhav","Jadhav@1228","8125467896","Verified",Now(),111),
+("sanvi12@gmail.com","Sanvi","Jadhav","sanu@123","987689865","Not Verified",Now(),112),
+("saket@gmail.com","Saket","Patil","SK47@1228","980987699","Verified",Now(),113),
+("nami@gmail.com","Nami","Khot","natu@123","9145789865","Not Verified",Now(),114),
+("Swapnil@gmail.com","Swapnil","Yadav","Yadav@1525","9987667896","Verified",Now(),115),
+("priti12@gmail.com","Priti","Mane","preety@123","987689865","Not Verified",Now(),116);
+
+
+
+INSERT INTO Hired_Candidate (Id, First_Name, Middle_Name, Last_Name, Email_Id, Hired_City, Degree, Hired_Date, Mobile_Number, Permanent_Pincode, Hired_Lab, Attitude, Communication_Remark, Knowledge_Remark, Aggregate_Remark, Status, Creator_Stamp, Creator_User)
+VALUES
+(1, "Rehan", "Javed", "Pinjari", "pinjarirehan07@gmail.com", "Mumbai", "BE-Mech", '2023-04-02', "8421620220", "623458", "Mumbai", "Positive", "Good", "Good", "Good", "Accepted", NOW(), 1),
+(2, "Sakshi", "Shankar", "Jadhav", "sakshijadhav@gmail.com", "Mumbai", "BE-IT", '2024-05-12', "9178654596", "785412", "Mumbai", "Positive", "Excellent", "Excellent", "Excellent", "Accepted", NOW(), 2),
+(3, "Sanket", "Sanjay", "Kalambaste", "sanketkalambaste@gmail.com", "Mumbai", "BE-IT", '2019-04-02', "9685743245", "400654", "Mumbai", "Average", "Excellent", "Weak", "Good", "Accepted", NOW(), 3),
+(4, "Vedant", "Abcd", "Gujarati", "vedantgujarati@gmail.com", "Mumbai", "BE-CS", '2023-06-14', "7098325648", "623462", "Mumbai", "Positive", "Excellent", "Excellent", "Excellent", "Accepted", NOW(), 4),
+(5, "Vaibhav", "Abcd", "Kumbhar", "vaibhav15@gmail.com", "Mumbai", "BE-CS", '2024-01-01', "7078451296", "400065", "Mumbai", "Average", "Good", "Good", "Good", "Accepted", NOW(), 5),
+(6, "Sayali", "Abcd", "Matale", "sayali@gmail.com", "Mumbai", "BSC-CS", '2024-01-01', "8574968598", "623745", "Mumbai", "Average", "Need Help", "Excellent", "Good", "Accepted", NOW(), 6),
+(7, "Sushmita", "Sandip", "Pawar", "sushmitapawar@gmail.com", "Mumbai", "BE-IT", '2024-03-20', "9884567845", "400062", "Mumbai", "Positive", "Excellent", "Excellent", "Excellent", "Accepted", NOW(), 7),
+(8, "Pratik", "Mahendra", "Sawant", "pratiksawant@gmail.com", "Mumbai", "BE-IT", '2024-03-20', "9865457852", "623402", "Mumbai", "Positive", "Good", "Excellent", "Good", "Accepted", NOW(), 8),
+(9, "Akash", "Ananda", "Patil", "akash@gmail.com", "Mumbai", "BSC-CS", '2024-04-15', "9857423899", "400100", "Mumbai", "Positive", "Good", "Excellent", "Good", "Accepted", NOW(), 9),
+(10, "Pranali", "Abcd", "Deware", "pranali@gmail.com", "Mumbai", "MCA", '2023-12-02', "9685789865", "400084", "Mumbai", "Average", "Good", "Good", "Good", "Accepted", NOW(), 10),
+(11, "Tushar", "Shankar", "Jadhav", "tusharjadhav@gmail.com", "Mumbai", "BE-IT", '2024-03-16', "8125467896", "400084", "Mumbai", "Positive", "Good", "Excellent", "Good", "Accepted", NOW(), 11),
+(12, "Saket", "Kumar", "Patil", "saket@gmail.com", "Mumbai", "BE-IT", '2024-06-20', "980987699", "400200", "Mumbai", "Average", "Good", "Good", "Good", "Accepted", NOW(), 13),
+(13, "Nami", "Ramesh", "Khot", "nami@gmail.com", "Mumbai", "BE-CS", '2024-07-01', "9145789865", "400300", "Mumbai", "Positive", "Excellent", "Good", "Good", "Accepted", NOW(), 14);
+
+
+
+INSERT INTO Fellowship_Candidate (Id, CIC_ID, First_Name, Middle_Name, Last_Name, Email_Id, Hired_City, Degree, Hired_Date, Mobile_Number, Permanent_Pincode, Hired_Lab, Attitude, Communication_Remark, Knowledge_Remark,
+ Aggregate_Remark, Creator_Stamp, Creator_User, Birth_Date,Is_Birth_Date_Verified, Parent_Name, Parent_Occupation, Parent_Mobile_Number, Parent_Annual_Salary, Local_Address, Permanent_Address, Photo_Path, Joining_Date,
+ Candidate_Status, Personal_Information, Bank_Information, Education_Information,Document_Status, Remark) VALUES
+
+(1001, "CIC12345-01", "Rehan", "Javed", "Pinjari", "pinjarirehan07@gmail.com", "Mumbai", "BE-Mech", '2023-04-02', "8421620220", "623458", "Mumbai", "Positive", "Good", "Good", "Good", NOW(), 1, '2001-07-11', true, "Javed Pinjari", "Worker",
+ "7276424348", 260000, "Same as Permanent", "Sector 19 CBD Belapur", "path/to/pic.jpg", '2024-04-02', "Active", "Complete BE-Mech", "Union Bank", "CGPA 8.70", "Verified", "All up to Date"),
+
+(1002, "CIC12345-02", "Sakshi", "Shankar", "Jadhav", "sakshijadhav@gmail.com", "Mumbai", "BE-IT", '2024-05-12', "9178654596", "785412", "Mumbai", "Positive", "Excellent", "Excellent", "Excellent", NOW(), 2, '2000-07-01', true, "Shankar Jadhav",
+"Business", "9685741256", 280000, "Same as Permanent", "Sector 6 Airoli", "path/to/pic.jpg", '2024-05-12', "Active", "Complete BE-IT", "Bank of Maharashtra", "CGPA 8.60", "Verified", "All up to Date"),
+
+(1003, "CIC12345-03", "Sanket", "Sanjay", "Kalambaste", "sanketkalambaste@gmail.com", "Mumbai", "BE-IT", '2019-04-02', "9685743245", "400654", "Mumbai", "Average", "Excellent", "Weak", "Good", NOW(), 3, '2001-09-20', true, "Sanjay Kalambaste",
+ "Engineer", "9685741258", 300000, "Same as Permanent", "Sector 8 Nerul", "path/to/pic.jpg", '2019-04-02', "Active", "Complete BE-IT", "State Bank of India", "CGPA 7.90", "Verified", "All up to Date"),
+
+(1004, "CIC12345-04", "Vedant", "Abcd", "Gujarati", "vedantgujarati@gmail.com", "Mumbai", "BE-CS", '2023-06-14', "7098325648", "623462", "Mumbai", "Positive", "Excellent", "Excellent", "Excellent", NOW(), 4, '2000-12-10', true, "Abcd Gujarati",
+"Doctor", "9685741259", 320000, "Same as Permanent", "Sector 9 Panvel", "path/to/pic.jpg", '2023-06-14', "Active", "Complete BE-CS", "ICICI Bank", "CGPA 9.10", "Verified", "All up to Date"),
+
+
+(1005, "CIC12345-05", "Vaibhav", "Abcd", "Kumbhar", "vaibhav15@gmail.com", "Mumbai", "BE-CS", '2024-01-01', "7078451296", "400065", "Mumbai", "Average", "Good", "Good", "Good", NOW(), 5, '2000-11-05', true, "Abcd Kumbhar", "Businessman", "9685741260",
+ 350000, "Same as Permanent", "Sector 10 Vashi", "path/to/pic.jpg", '2024-01-01', "Active", "Complete BE-CS", "Axis Bank", "CGPA 8.40", "Verified", "All up to Date"),
+
+(1006, "CIC12345-06", "Sayali", "Abcd", "Matale", "sayali@gmail.com", "Mumbai", "BSC-CS", '2024-01-01', "8574968598", "623745", "Mumbai", "Average", "Need Help", "Excellent", "Good", NOW(), 6, '2000-04-15', true, "Abcd Matale", "Teacher", "9685741261",
+ 380000, "Same as Permanent", "Sector 11 Airoli", "path/to/pic.jpg", '2024-01-01', "Active", "Complete BSC-CS", "Bank of Baroda", "CGPA 8.60", "Verified", "All up to Date"),
+
+(1007, "CIC12345-07", "Sushmita", "Sandip", "Pawar", "sushmitapawar@gmail.com", "Mumbai", "BE-IT", '2024-03-20', "9884567845", "400062", "Mumbai", "Positive", "Excellent", "Excellent", "Excellent", NOW(), 7, '2001-03-20', true, "Sandip Pawar", "Government Employee",
+"9685741262", 400000, "Same as Permanent", "Sector 12 Ghansoli", "path/to/pic.jpg", '2024-03-20', "Active", "Complete BE-IT", "Punjab National Bank", "CGPA 9.00", "Verified", "All up to Date"),
+
+(1008, "CIC12345-08", "Pratik", "Mahendra", "Sawant", "pratiksawant@gmail.com", "Mumbai", "BE-IT", '2024-03-20', "9865457852", "623402", "Mumbai", "Positive", "Good", "Excellent", "Good", NOW(), 8, '2001-07-25', true, "Mahendra Sawant", "Business", "9685741263", 420000,
+ "Same as Permanent", "Sector 13 Belapur", "path/to/pic.jpg", '2024-03-20', "Active", "Complete BE-IT", "Bank of India", "CGPA 8.80", "Verified", "All up to Date"),
+
+(1009, "CIC12345-09", "Akash", "Ananda", "Patil", "akash@gmail.com", "Mumbai", "BSC-CS", '2024-04-15', "9857423899", "400100", "Mumbai", "Positive", "Good", "Excellent", "Good", NOW(), 9, '2000-10-30', true, "Ananda Patil", "Doctor", "9685741264", 450000, "Same as Permanent",
+ "Sector 14 Thane", "path/to/pic.jpg", '2024-04-15', "Active", "Complete BSC-CS", "IDBI Bank", "CGPA 8.70", "Verified", "All up to Date"),
+
+(1010, "CIC12345-10", "Pranali", "Abcd", "Deware", "pranali@gmail.com", "Mumbai", "MCA", '2023-12-02', "9685789865", "400084", "Mumbai", "Average", "Good", "Good", "Good", NOW(), 10, '2001-08-20', true, "Abcd Daware", "Engineer", "9685741265", 480000, "Same as Permanent",
+ "Sector 15 Panvel", "path/to/pic.jpg", '2023-12-02', "Active", "Complete MCA", "Bank of Maharashtra", "CGPA 8.90", "Verified", "All up to Date"),
+
+(1011, "CIC12345-11", "Tushar", "Shankar", "Jadhav", "tusharjadhav@gmail.com", "Mumbai", "BE-IT", '2024-03-16', "8125467896", "400084", "Mumbai", "Positive", "Good", "Excellent", "Good", NOW(), 11, '2000-10-25', true, "Shankar Jadhav", "Engineer", "9178654598", 600000,
+"Same as Permanent", "Sector 16 Vashi", "path/to/pic.jpg", '2024-03-16', "Active", "Complete BE-IT", "HDFC Bank", "CGPA 8.60", "Verified", "All up to Date"),
+
+(1012, "CIC12345-12", "Saket", "Kumar", "Patil", "saket@gmail.com", "Mumbai", "BE-IT", '2024-06-20', "980987699", "400200", "Mumbai", "Average", "Good", "Good", "Good", NOW(), 12, '2001-01-05', true, "Kumar Patil", "Business", "9685741267", 520000, "Same as Permanent",
+"Sector 17 Airoli", "path/to/pic.jpg", '2024-06-20', "Active", "Complete BE-IT", "Bank of Baroda", "CGPA 8.80", "Verified", "All up to Date"),
+
+(1013, "CIC12345-13", "Nami", "Ramesh", "Khot", "nami@gmail.com", "Mumbai", "BE-CS", '2024-07-01', "9145789865", "400300", "Mumbai", "Positive", "Excellent", "Good", "Good", NOW(), 13, '2000-06-12', true, "Ramesh Khot", "Doctor", "9685741268", 540000, "Same as Permanent",
+"Sector 18 Nerul", "path/to/pic.jpg", '2024-07-01', "Active", "Complete BE-CS", "State Bank of India", "CGPA 9.20", "Verified", "All up to Date");
+
+
+
+INSERT INTO Candidate_Bank_Details (Id, Candidate_Id, Name, Account_Number, Is_Account_Number_Verified, Ifsc_Code, Is_Ifsc_Code_Verified, Pan_Number, Is_Pan_Number_Verified, Adhar_Number, Is_Adhar_Number_Verified, Creator_Stamp, Creator_User)
+ VALUES
+(1, 1001, "Rehan Pinjari", "785412369852147", true, "NAG852365", true, "REHA85214", true, "741298563214", true, NOW(), 1),
+(2, 1002, "Sakshi Jadhav", "785412369852148", true, "NAG852366", true, "SAJA85215", true, "741298563215", true, NOW(), 2),
+(3, 1003, "Sanket Kalambaste", "785412369852149", true, "NAG852367", true, "SAKA85216", true, "741298563216", true, NOW(), 3),
+(4, 1004, "Vedant Gujarati", "785412369852150", true, "NAG852368", true, "VEGU85217", true, "741298563217", true, NOW(), 4),
+(5, 1005, "Vaibhav Kumbhar", "785412369852151", true, "NAG852369", true, "VAKU85218", true, "741298563218", true, NOW(), 5),
+(6, 1006, "Sayali Matale", "785412369852152", true, "NAG852370", true, "SAMA85219", true, "741298563219", true, NOW(), 6),
+(7, 1007, "Sushmita Pawar", "785412369852153", true, "NAG852371", true, "SUPA85220", true, "741298563220", true, NOW(), 7),
+(8, 1008, "Pratik Sawant", "785412369852154", true, "NAG852372", true, "PRSA85221", true, "741298563221", true, NOW(), 8),
+(9, 1009, "Akash Patil", "785412369852155", true, "NAG852373", true, "AKPA85222", true, "741298563222", true, NOW(), 9),
+(10, 1010, "Pranali Deware", "785412369852156", true, "NAG852374", true, "PRDE85223", true, "741298563223", true, NOW(), 10);
+
+
+
+INSERT INTO Candidate_Qualification (Id, Candidate_Id, Diploma, Degree_Name, Is_Degree_Name_Verified, Employee_Decipline, Is_Employee_Decipline_Verified, Passing_Year, Is_Passing_Year_Verified, Final_Year_Percentage, Is_Final_Year_Percentage_Verified, Training_Institute, Is_Training_Institute_Verified, Training_Duration_Month, Is_Training_Duration_Month_Verified, Other_Training, Is_Other_Training_Verified, Creator_Stamp, Creator_User) VALUES
+(1, 1001, "Mechanical Engineering", "Bachelor of Engineering", true, "Mechanical Engineering", true, 2023, true, 80.83, true, "YTCEM", true, "3 years", true, "AWS", true, NOW(), 1),
+(2, 1002, "Computer Science", "Bachelor of Engineering", true, "Information Technology", true, 2023, true, 82.45, true, "KJSIEIT", true, "3 years", true, "Azure", true, NOW(), 2),
+(3, 1003, "Information Technology", "Bachelor of Engineering", true, "Information Technology", true, 2022, true, 75.50, true, "SPIT", true, "3 years", true, "GCP", true, NOW(), 3),
+(4, 1004, "Computer Science", "Bachelor of Engineering", true, "Computer Science", true, 2023, true, 88.90, true, "DJ Sanghvi", true, "3 years", true, "AWS", true, NOW(), 4),
+(5, 1005, "Computer Science", "Bachelor of Engineering", true, "Computer Science", true, 2024, true, 76.70, true, "VESIT", true, "3 years", true, "Azure", true, NOW(), 5),
+(6, 1006, "Information Technology", "Bachelor of Science", true, "Computer Science", true, 2024, true, 80.00, true, "KC College", true, "3 years", true, "GCP", true, NOW(), 6),
+(7, 1007, "Information Technology", "Bachelor of Engineering", true, "Information Technology", true, 2024, true, 85.50, true, "SIES GST", true, "3 years", true, "AWS", true, NOW(), 7),
+(8, 1008, "Information Technology", "Bachelor of Engineering", true, "Information Technology", true, 2024, true, 77.00, true, "Thadomal Shahani", true, "3 years", true, "Azure", true, NOW(), 8),
+(9, 1009, "Computer Science", "Bachelor of Science", true, "Computer Science", true, 2024, true, 83.20, true, "Bhavan's College", true, "3 years", true, "GCP", true, NOW(), 9),
+(10, 1010, "Computer Science", "Master of Computer Applications", true, "Computer Applications", true, 2024, true, 78.50, true, "Xavier's Institute", true, "3 years", true, "AWS", true, NOW(), 10);
+
+
+
+INSERT INTO Candidate_Documents (Id, Candidate_Id, Doc_Type, Doc_Path, Status, Creator_Stamp, Creator_User) VALUES
+(1, 1001, "PAN card,Result,Addhar Card,Any Certificate", "path/to/doc/", "Approved", NOW(), 1),
+(2, 1002, "PAN card,Result,Addhar Card,Any Certificate", "path/to/doc/", "Approved", NOW(), 2),
+(3, 1003, "PAN card,Result,Addhar Card,Any Certificate", "path/to/doc/", "Approved", NOW(), 3),
+(4, 1004, "PAN card,Result,Addhar Card,Any Certificate", "path/to/doc/", "Approved", NOW(), 4),
+(5, 1005, "PAN card,Result,Addhar Card,Any Certificate", "path/to/doc/", "Approved", NOW(), 5),
+(6, 1006, "PAN card,Result,Addhar Card,Any Certificate", "path/to/doc/", "Approved", NOW(), 6),
+(7, 1007, "PAN card,Result,Addhar Card,Any Certificate", "path/to/doc/", "Approved", NOW(), 7),
+(8, 1008, "PAN card,Result,Addhar Card,Any Certificate", "path/to/doc/", "Approved", NOW(), 8),
+(9, 1009, "PAN card,Result,Addhar Card,Any Certificate", "path/to/doc/", "Approved", NOW(), 9),
+(10, 1010, "PAN card,Result,Addhar Card,Any Certificate", "path/to/doc/", "Approved", NOW(), 10);
+
+
+
+INSERT INTO Company (Id, Name, Address, Location, Status, Creator_Stamp, Creator_User) VALUES
+(101, "QualityKiosk Technologies", "C Wing, Rupa Solitaire, Sector-1, Millennium Business Park", "Navi Mumbai", "Active", NOW(), 1),
+(102, "Accenture", "1st, 2nd, 3rd, & 4th Office Level, Building No. 02 Mindspace", "Navi Mumbai", "Active", NOW(), 2),
+(103, "ContractPod Solutions Pvt. Ltd", "2nd Floor, Raheja Platinum, WeWork India, Road, Sag Baug, Marol", "Mumbai", "Active", NOW(), 3),
+(104, "Amazon Web Services India Private Limited", "1th Floor, Godrej One, Pirojshanagar, Vikhroli", "Mumbai", "Active", NOW(), 4),
+(105, "Amdocs DVCI", "Tower 12, Magarpatta Inner Circle, Cybercity, Magarpatta, Hadapsar", "Pune", "Active", NOW(), 5),
+(106, "Jet2 Travel Technologies Pvt. Ltd.", "16th floor, Jet2 Travel Technologies Pvt. Ltd, Viman Nagar", "Pune", "Active", NOW(), 7),
+(107, "Capgemini Technology Services India Limited", "M6, Capgemini Knowledge Park, Thane - Belapur Rd, Airoli", "Navi Mumbai", "Active", NOW(), 9),
+(108, "Zeus Learning", "Tower B, Peninsula Business Park, Ganapatrao Kadam Marg, Lower Parel", "Mumbai", "Active", NOW(), 10),
+(109, "Tata Consultancy Services", "TCS House, Raveline Street, Fort", "Mumbai", "Active", NOW(), 11),
+(110, "Infosys Limited", "Electronics City, Hosur Road", "Bengaluru", "Active", NOW(), 12);
+
+
+
+INSERT INTO Tech_Stack (Id, Tech_Name, Image_Path, Framework, Cur_Status, Creator_Stamp, Creator_User) VALUES
+(301, "Java", "path/to/java.jpg", "Selenium", "Active", Now(), 1),
+(302, "Java", "path/to/java.jpg", "Selenium", "Active", Now(), 2),
+(303, "UI/UX", "path/to/uiux.jpg", "Figma", "Active", Now(), 3),
+(304, "Java", "path/to/java.jpg", "Selenium", "Active", Now(), 4),
+(305, "Java", "path/to/java.jpg", "Selenium", "Active", Now(), 5),
+(306, "Python", "path/to/python.jpg", "Django", "Active", Now(), 7),
+(307, "Java", "path/to/java.jpg", "Angular", "Active", Now(), 9),
+(308, "SQL", "path/to/sql.jpg", "Workbench", "Active", Now(), 10),
+(309, "JavaScript", "path/to/javascript.jpg", "React", "Active", Now(), 11),
+(310, "Ruby", "path/to/ruby.jpg", "Rails", "Active", Now(), 12);
+
+
+
+INSERT INTO Tech_Type (Id, Type_Name, Cur_Status, Creator_Stamp, Creator_User) VALUES
+(401, "Automation", "Active", Now(), 1),
+(402, "Automation", "Active", Now(), 2),
+(403, "Graphics", "Active", Now(), 3),
+(404, "Automation", "Active", Now(), 4),
+(405, "Automation", "Active", Now(), 5),
+(406, "Developer", "Active", Now(), 7),
+(407, "Automation", "Active", Now(), 9),
+(408, "Developer", "Active", Now(), 10),
+(409, "Data Science", "Active", Now(), 11),
+(410, "Cyber Security", "Active", Now(), 12);
+
+
+
+INSERT INTO Lab (Id,Name,Location,Address,Status,Creator_Stamp,Creator_User) VALUES
+(501,"BL Mumbai","Mumbai","Address of Mumbai BL","Active",Now(),1),
+(502,"BL Mumbai","Mumbai","Address of Mumbai BL","Active",Now(),2),
+(503,"BL Pune","Pune","Address of Pune BL","Active",Now(),3),
+(504,"BL Pune","Pune","Address of Pune BL","Active",Now(),4),
+(505,"BL Bengalore","Bengalore","Address of Bengalore BL","Active",Now(),5),
+(506,"BL Bengalore","Bengalore","Address of Bengalore BL","Active",Now(),7),
+(507,"BL Mumbai","Mumbai","Address of Mumbai BL","Active",Now(),9),
+(508,"BL Pune","Pune","Address of Pune BL","Active",Now(),10),
+(509, "BL Delhi", "Delhi", "Address of Delhi BL", "Active", Now(), 11),
+(510, "BL Chennai", "Chennai", "Address of Chennai BL", "Active", Now(), 12);
+
+
+
+INSERT INTO Lab_Threshold (Id,Lab_Id,Lab_Capacity,Lead_Threshold,Ideation_Engg_Threshold,Buddy_Engg_Threshold,Status,Creator_Stamp,Creator_User) VALUES
+(1,501,120,19,9,8,"ACTV",Now(),1),
+(2,502,120,19,8,9,"ACTV",Now(),2),
+(3,503,57,13,7,9,"ACTV",Now(),3),
+(4,504,57,13,8,11,"ACTV",Now(),4),
+(5,505,38,11,7,8,"ACTV",Now(),5),
+(6,506,38,11,8,7,"ACTV",Now(),7),
+(7,507,120,19,9,8,"ACTV",Now(),9),
+(8,508,57,13,8,9,"ACTV",Now(),10),
+(9, 509, 120, 19, 9, 8, "ACTV", Now(), 11),
+(10, 510, 57, 13, 8, 11, "ACTV", Now(), 12);
+
+
+
+INSERT INTO Maker_Program (Id,Program_Name,Program_Type,Program_Link,Tech_Stack_Id,Tech_Type_Id,Is_Program_Approved,Description,Status,Creator_Stamp,Creator_User) VALUES
+(001,"SDET","Automation Testing","https://www.sdet.com",301,401,true,"Manual & Automation Testing","Active",Now(),1),
+(002,"SDET","Automation Testing","https://www.sdet.com",302,402,true,"Manual & Automation Testing","Active",Now(),2),
+(003,"UI/Ux","Graphics Design","https://www.uiux.com",303,403,true,"UI Design with Abode XD & Figma","Active",Now(),3),
+(004,"SDET","Automation Testing","https://www.sdet.com",304,404,true,"Manual & Automation Testing","Active",Now(),4),
+(005,"SDET","Automation Testing","https://www.sdet.com",305,405,true,"Manual & Automation Testing","Active",Now(),5),
+(006,"Python","Python Developer","https://www.python.com",306,406,true,"Python, Numpy,Boto3","Active",Now(),7),
+(007,"Java","FullStack Developer","https://www.javafullstackdeveloper.com",307,407,true,"Java,Angular,Sql,JDBC","Active",Now(),9),
+(008,"SQL","SQL Developer","https://www.sqldeveloper.com",308,408,true,"SQL,Workbench,oracle database","Active",Now(),10),
+(009, "JavaEE", "FullStack Developer", "https://www.javaee.com", 301, 401, true, "Java Enterprise Edition Development", "Active", Now(), 11),
+(010, "Python Automation", "Automation Testing", "https://www.pythonautomation.com", 302, 402, true, "Python Automation with Selenium", "Active", Now(), 12);
+
+
+
+INSERT INTO App_Parameters (Id,Key_Type,Key_Value,Key_Text,Cur_Status,Lastupd_User,Lastupd_Stamp,Creator_Stamp,Creator_User,Seq_Num) VALUES
+(1,"DOC_STATUS","PND","Pending","ACTV",1,Now(),Now(),1,1),
+(2,"DOC_STATUS","RCEVD","Received","ACTV",2,Now(),Now(),2,2),
+(3,"CUR_STATUS","ACTV","Active","ACTV",3,Now(),Now(),3,1),
+(4,"CUR_STATUS","IACTV","Inactive","ACTV",4,Now(),Now(),4,1),
+(5,"BATCH_STATUS","INPROCESS","In Process","ACTV",5,Now(),Now(),5,1),
+(6,"BATCH_STATUS","HOLD","Hold","ACTV",7,Now(),Now(),7,2),
+(7,"BATCH_STATUS","COMPL","Completed","ACTV",9,Now(),Now(),9,3),
+(8,"DOC_STATUS","RCEVD","Received","ACTV",10,Now(),Now(),10,3),
+(9, "DOC_STATUS", "DPLCT", "Duplicate", "ACTV", 11, Now(), Now(), 11, 4),
+(10, "BATCH_STATUS", "CANCL", "Cancelled", "ACTV", 12, Now(), Now(), 12, 5);
+
+
+
+INSERT INTO Mentor (Id,Name,Mentor_Type,Lab_Id,Status,Creator_Stamp,Creator_User) VALUES
+(1,"Sunil","Lead/Practice head",501,"ACTV",Now(),1),
+(2,"Venkat","Support Mentor",505,"ACTV",Now(),2),
+(3,"Pooja","Support Mentor",503,"ACTV",Now(),3),
+(4,"Aishwarya","Buddy Mentor",505,"ACTV",Now(),4),
+(5,"Gunjan","Lead/Practice head",501,"ACTV",Now(),5),
+(6,"Nagendra","Support Mentor",505,"ACTV",Now(),7),
+(7,"Roshni","Support Mentor",503,"ACTV",Now(),9),
+(8,"Sudhakar","Lead/Practice head",501,"ACTV",Now(),10),
+(9, "Aashish", "Buddy Mentor", 506, "ACTV", Now(), 11),
+(10, "Atheesham", "Support Mentor", 507, "ACTV", Now(), 12);
+
+
+
+INSERT INTO Mentor_Ideation_Map (Id,Parent_Mentor_Id,Mentor_Id,Status,Creator_Stamp,Creator_User) VALUES
+(01,1,3,"ACTV",Now(),1),
+(02,1,3,"ACTV",Now(),2),
+(03,2,6,"ACTV",Now(),3),
+(04,8,7,"ACTV",Now(),4),
+(05,8,7,"ACTV",Now(),5),
+(06,5,3,"ACTV",Now(),7),
+(07,5,6,"ACTV",Now(),9),
+(08,1,7,"ACTV",Now(),10),
+(9, 10, 8, "ACTV", Now(), 11),
+(10, 9, 6, "ACTV", Now(), 12);
+
+
+
+INSERT INTO Mentor_Tech_Stack (Id,Mentor_Id,Tech_Stack_Id,Status,Creator_Stamp,Creator_User) VALUES
+(1,1,301,"ACTV",Now(),1),
+(2,2,302,"ACTV",Now(),2),
+(3,3,303,"ACTV",Now(),3),
+(4,4,304,"ACTV",Now(),4),
+(5,5,305,"ACTV",Now(),5),
+(6,6,306,"ACTV",Now(),7),
+(7,7,307,"ACTV",Now(),9),
+(8,8,308,"ACTV",Now(),10),
+(9, 9, 301, "ACTV", Now(), 11),
+(10, 10, 302, "ACTV", Now(), 12);
+
+
+
+INSERT INTO Company_Requirement (Id,Company_Id,Requested_Month,City,Is_Doc_Verification,Requirement_Doc_Path,No_Of_Engg,Tech_Stack_Id,Tech_Type_Id,Maker_Program_Id,Lead_Id,Ideation_Engg_Id,Buddy_Engg_Id,Special_Remark,Status,Creator_Stamp,Creator_User) VALUES
+(111,101,'2024-08-03',"Mumbai",true,"/path/to/doc.pdf",12,301,401,001,1,2,4,"Good in Java","Active",Now(),1),
+(222,102,'2023-11-12',"Mumbai",true,"/path/to/doc.pdf",15,302,402,002,1,2,4,"Good in Logic","Active",Now(),2),
+(333,103,'2024-01-19',"Bengalore",true,"/path/to/doc.pdf",23,303,403,003,8,7,4,"Good in Graphics","Active",Now(),3),
+(444,104,'2019-12-28',"Pune",true,"/path/to/doc.pdf",28,304,404,004,5,3,4,"Good in Logic","Active",Now(),4),
+(555,105,'2023-08-03',"Navi Mumbai",true,"/path/to/doc.pdf",14,305,405,005,5,3,4,"Good in Java","Active",Now(),5),
+(666,106,'2024-04-22',"Mumbai",true,"/path/to/doc.pdf",12,306,406,006,1,2,4,"Good in Python","Active",Now(),7),
+(777,107,'2023-10-02',"Mumbai",true,"/path/to/doc.pdf",23,307,407,007,8,7,4,"Good in Logic","Active",Now(),9),
+(888,108,'2024-02-14',"Navi Mumbai",true,"/path/to/doc.pdf",12,308,408,008,1,2,4,"Good in SQL","Active",Now(),10),
+(999,101,'2024-09-15',"Pune",true,"/path/to/docs.pdf",18,301,401,001,1,2,4,"Skilled in Java","Active",Now(),11),
+(1010,102,'2023-10-20',"Pune",true,"/path/to/docs.pdf",20,302,402,002,1,2,4,"Good in Web Tech","Active",Now(),12);
+
+
+
+INSERT INTO Candidate_Stack_Assignment (Id,Requirement_Id,Candidate_Id,Assign_Date,Complete_Date,Status,Creator_Stamp,Creator_User) VALUES
+(01,111,1001,'2024-03-18','2024-05-18',"Completed",Now(),1),
+(02,222,1002,'2024-04-18','2024-07-18',"Pending",Now(),2),
+(03,333,1003,'2019-08-05','2019-12-03',"Completed",Now(),3),
+(04,444,1004,'2023-06-19','2023-11-10',"Completed",Now(),4),
+(05,555,1005,'2024-01-03','2024-05-18',"Completed",Now(),5),
+(06,666,1006,'2023-11-04','2024-03-15',"Completed",Now(),7),
+(07,777,1007,'2024-02-13','2024-06-27',"Pending",NOw(),9),
+(08,888,1008,'2024-02-13','2024-06-27',"Pending",Now(),10),
+(09, 999, 1009, '2024-07-15', '2024-12-31', "Pending", Now(), 11),
+(10, 1010, 1010, '2024-08-01', '2024-07-12', "Active", Now(), 12);
+
+
+
+
+ -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+                                                                      TABLES
+ -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+mysql> SELECT * FROM User_Details;
++----+----------------------------+------------+------------+--------------+----------------+--------------+---------------------+--------------+
+| Id | Email_Id                   | First_Name | Last_Name  | Password     | Contact_Number | Verified     | Creator_Stamp       | Creator_User |
++----+----------------------------+------------+------------+--------------+----------------+--------------+---------------------+--------------+
+|  1 | pinjarirehan07@gmail.com   | Rehan      | Pinjari    | Rehan@11     | 8421620220     | Verified     | 2024-09-21 10:24:43 |          101 |
+|  2 | sakshijadhav@gmail.com     | Sakshi     | Jadhav     | Sakshi@285   | 9178654596     | Verified     | 2024-09-21 10:24:43 |          102 |
+|  3 | sanketkalambaste@gmail.com | Sanket     | Kalambaste | Sanket@123   | 9685743245     | Not Verified | 2024-09-21 10:24:43 |          103 |
+|  4 | vedantgujarati@gmail.com   | Vedant     | Gujarati   | Ved@123      | 7098325648     | Verified     | 2024-09-21 10:24:43 |          104 |
+|  5 | vaibhav15@gmail.com        | Vaibhav    | Kumbhar    | VaibhavS@123 | 7078451296     | Verified     | 2024-09-21 10:24:43 |          105 |
+|  6 | sayali@gmail.com           | Sayali     | Matale     | Sayu@1999    | 8574968598     | Verified     | 2024-09-21 10:24:43 |          106 |
+|  7 | sushmitapawar@gmail.com    | Sushmita   | Pawar      | Pawar@2001   | 9884567845     | Not Verified | 2024-09-21 10:24:43 |          107 |
+|  8 | pratiksawant@gmail.com     | Pratik     | Sawant     | Sawant@1998  | 9865457852     | Not Verified | 2024-09-21 10:24:43 |          108 |
+|  9 | akash@gmail.com            | Akash      | Patil      | Ak47@1228    | 9857423899     | Verified     | 2024-09-21 10:24:43 |          109 |
+| 10 | pranali@gmail.com          | Pranali    | Deware     | Panu@123     | 9685789865     | Not Verified | 2024-09-21 10:24:43 |          110 |
+| 11 | tusharjadhav@gmail.com     | Tushar     | Jadhav     | Jadhav@1228  | 8125467896     | Verified     | 2024-09-21 10:24:43 |          111 |
+| 12 | sanvi12@gmail.com          | Sanvi      | Jadhav     | sanu@123     | 987689865      | Not Verified | 2024-09-21 10:24:43 |          112 |
+| 13 | saket@gmail.com            | Saket      | Patil      | SK47@1228    | 980987699      | Verified     | 2024-09-21 10:24:43 |          113 |
+| 14 | nami@gmail.com             | Nami       | Khot       | natu@123     | 9145789865     | Not Verified | 2024-09-21 10:24:43 |          114 |
+| 15 | Swapnil@gmail.com          | Swapnil    | Yadav      | Yadav@1525   | 9987667896     | Verified     | 2024-09-21 10:24:43 |          115 |
+| 16 | priti12@gmail.com          | Priti      | Mane       | preety@123   | 987689865      | Not Verified | 2024-09-21 10:24:43 |          116 |
++----+----------------------------+------------+------------+--------------+----------------+--------------+---------------------+--------------+
+16 rows in set (0.01 sec)
+
+
+
+
+mysql> SELECT * FROM Hired_Candidate;
++----+------------+-------------+------------+----------------------------+------------+---------+------------+---------------+-------------------+-----------+----------+----------------------+------------------+------------------+----------+---------------------+--------------+
+| Id | First_Name | Middle_Name | Last_Name  | Email_Id                   | Hired_City | Degree  | Hired_Date | Mobile_Number | Permanent_Pincode | Hired_Lab | Attitude | Communication_Remark | Knowledge_Remark | Aggregate_Remark | Status   | Creator_Stamp       | Creator_User |
++----+------------+-------------+------------+----------------------------+------------+---------+------------+---------------+-------------------+-----------+----------+----------------------+------------------+------------------+----------+---------------------+--------------+
+|  1 | Rehan      | Javed       | Pinjari    | pinjarirehan07@gmail.com   | Mumbai     | BE-Mech | 2023-04-02 | 8421620220    | 623458            | Mumbai    | Positive | Good                 | Good             | Good             | Accepted | 2024-09-21 10:30:14 |            1 |
+|  2 | Sakshi     | Shankar     | Jadhav     | sakshijadhav@gmail.com     | Mumbai     | BE-IT   | 2024-05-12 | 9178654596    | 785412            | Mumbai    | Positive | Excellent            | Excellent        | Excellent        | Accepted | 2024-09-21 10:30:14 |            2 |
+|  3 | Sanket     | Sanjay      | Kalambaste | sanketkalambaste@gmail.com | Mumbai     | BE-IT   | 2019-04-02 | 9685743245    | 400654            | Mumbai    | Average  | Excellent            | Weak             | Good             | Accepted | 2024-09-21 10:30:14 |            3 |
+|  4 | Vedant     | Abcd        | Gujarati   | vedantgujarati@gmail.com   | Mumbai     | BE-CS   | 2023-06-14 | 7098325648    | 623462            | Mumbai    | Positive | Excellent            | Excellent        | Excellent        | Accepted | 2024-09-21 10:30:14 |            4 |
+|  5 | Vaibhav    | Abcd        | Kumbhar    | vaibhav15@gmail.com        | Mumbai     | BE-CS   | 2024-01-01 | 7078451296    | 400065            | Mumbai    | Average  | Good                 | Good             | Good             | Accepted | 2024-09-21 10:30:14 |            5 |
+|  6 | Sayali     | Abcd        | Matale     | sayali@gmail.com           | Mumbai     | BSC-CS  | 2024-01-01 | 8574968598    | 623745            | Mumbai    | Average  | Need Help            | Excellent        | Good             | Accepted | 2024-09-21 10:30:14 |            6 |
+|  7 | Sushmita   | Sandip      | Pawar      | sushmitapawar@gmail.com    | Mumbai     | BE-IT   | 2024-03-20 | 9884567845    | 400062            | Mumbai    | Positive | Excellent            | Excellent        | Excellent        | Accepted | 2024-09-21 10:30:14 |            7 |
+|  8 | Pratik     | Mahendra    | Sawant     | pratiksawant@gmail.com     | Mumbai     | BE-IT   | 2024-03-20 | 9865457852    | 623402            | Mumbai    | Positive | Good                 | Excellent        | Good             | Accepted | 2024-09-21 10:30:14 |            8 |
+|  9 | Akash      | Ananda      | Patil      | akash@gmail.com            | Mumbai     | BSC-CS  | 2024-04-15 | 9857423899    | 400100            | Mumbai    | Positive | Good                 | Excellent        | Good             | Accepted | 2024-09-21 10:30:14 |            9 |
+| 10 | Pranali    | Abcd        | Deware     | pranali@gmail.com          | Mumbai     | MCA     | 2023-12-02 | 9685789865    | 400084            | Mumbai    | Average  | Good                 | Good             | Good             | Accepted | 2024-09-21 10:30:14 |           10 |
+| 11 | Tushar     | Shankar     | Jadhav     | tusharjadhav@gmail.com     | Mumbai     | BE-IT   | 2024-03-16 | 8125467896    | 400084            | Mumbai    | Positive | Good                 | Excellent        | Good             | Accepted | 2024-09-21 10:30:14 |           11 |
+| 12 | Saket      | Kumar       | Patil      | saket@gmail.com            | Mumbai     | BE-IT   | 2024-06-20 | 980987699     | 400200            | Mumbai    | Average  | Good                 | Good             | Good             | Accepted | 2024-09-21 10:30:14 |           13 |
+| 13 | Nami       | Ramesh      | Khot       | nami@gmail.com             | Mumbai     | BE-CS   | 2024-07-01 | 9145789865    | 400300            | Mumbai    | Positive | Excellent            | Good             | Good             | Accepted | 2024-09-21 10:30:14 |           14 |
++----+------------+-------------+------------+----------------------------+------------+---------+------------+---------------+-------------------+-----------+----------+----------------------+------------------+------------------+----------+---------------------+--------------+
+13 rows in set (0.01 sec)
+
+
+
+
+mysql> SELECT * FROM Fellowship_Candidate;
++------+-------------+------------+-------------+------------+----------------------------+------------+---------+------------+---------------+-------------------+-----------+----------+----------------------+------------------+------------------+---------------------+--------------+------------+------------------------+-------------------+---------------------+----------------------+----------------------+-------------------+-----------------------+-----------------+--------------+------------------+----------------------+----------------------+-----------------------+-----------------+----------------+
+| Id   | CIC_ID      | First_Name | Middle_Name | Last_Name  | Email_Id                   | Hired_City | Degree  | Hired_Date | Mobile_Number | Permanent_Pincode | Hired_Lab | Attitude | Communication_Remark | Knowledge_Remark | Aggregate_Remark | Creator_Stamp       | Creator_User | Birth_Date | Is_Birth_Date_Verified | Parent_Name       | Parent_Occupation   | Parent_Mobile_Number | Parent_Annual_Salary | Local_Address     | Permanent_Address     | Photo_Path      | Joining_Date | Candidate_Status | Personal_INformation | Bank_Information     | Education_Information | Document_Status | Remark         |
++------+-------------+------------+-------------+------------+----------------------------+------------+---------+------------+---------------+-------------------+-----------+----------+----------------------+------------------+------------------+---------------------+--------------+------------+------------------------+-------------------+---------------------+----------------------+----------------------+-------------------+-----------------------+-----------------+--------------+------------------+----------------------+----------------------+-----------------------+-----------------+----------------+
+| 1001 | CIC12345-01 | Rehan      | Javed       | Pinjari    | pinjarirehan07@gmail.com   | Mumbai     | BE-Mech | 2023-04-02 | 8421620220    | 623458            | Mumbai    | Positive | Good                 | Good             | Good             | 2024-09-21 10:37:37 |            1 | 2001-07-11 |                      1 | Javed Pinjari     | Worker              | 7276424348           | 260000               | Same as Permanent | Sector 19 CBD Belapur | path/to/pic.jpg | 2024-04-02   | Active           | Complete BE-Mech     | Union Bank           | CGPA 8.70             | Verified        | All up to Date |
+| 1002 | CIC12345-02 | Sakshi     | Shankar     | Jadhav     | sakshijadhav@gmail.com     | Mumbai     | BE-IT   | 2024-05-12 | 9178654596    | 785412            | Mumbai    | Positive | Excellent            | Excellent        | Excellent        | 2024-09-21 10:37:37 |            2 | 2000-07-01 |                      1 | Shankar Jadhav    | Business            | 9685741256           | 280000               | Same as Permanent | Sector 6 Airoli       | path/to/pic.jpg | 2024-05-12   | Active           | Complete BE-IT       | Bank of Maharashtra  | CGPA 8.60             | Verified        | All up to Date |
+| 1003 | CIC12345-03 | Sanket     | Sanjay      | Kalambaste | sanketkalambaste@gmail.com | Mumbai     | BE-IT   | 2019-04-02 | 9685743245    | 400654            | Mumbai    | Average  | Excellent            | Weak             | Good             | 2024-09-21 10:37:37 |            3 | 2001-09-20 |                      1 | Sanjay Kalambaste | Engineer            | 9685741258           | 300000               | Same as Permanent | Sector 8 Nerul        | path/to/pic.jpg | 2019-04-02   | Active           | Complete BE-IT       | State Bank of India  | CGPA 7.90             | Verified        | All up to Date |
+| 1004 | CIC12345-04 | Vedant     | Abcd        | Gujarati   | vedantgujarati@gmail.com   | Mumbai     | BE-CS   | 2023-06-14 | 7098325648    | 623462            | Mumbai    | Positive | Excellent            | Excellent        | Excellent        | 2024-09-21 10:37:37 |            4 | 2000-12-10 |                      1 | Abcd Gujarati     | Doctor              | 9685741259           | 320000               | Same as Permanent | Sector 9 Panvel       | path/to/pic.jpg | 2023-06-14   | Active           | Complete BE-CS       | ICICI Bank           | CGPA 9.10             | Verified        | All up to Date |
+| 1005 | CIC12345-05 | Vaibhav    | Abcd        | Kumbhar    | vaibhav15@gmail.com        | Mumbai     | BE-CS   | 2024-01-01 | 7078451296    | 400065            | Mumbai    | Average  | Good                 | Good             | Good             | 2024-09-21 10:37:37 |            5 | 2000-11-05 |                      1 | Abcd Kumbhar      | Businessman         | 9685741260           | 350000               | Same as Permanent | Sector 10 Vashi       | path/to/pic.jpg | 2024-01-01   | Active           | Complete BE-CS       | Axis Bank            | CGPA 8.40             | Verified        | All up to Date |
+| 1006 | CIC12345-06 | Sayali     | Abcd        | Matale     | sayali@gmail.com           | Mumbai     | BSC-CS  | 2024-01-01 | 8574968598    | 623745            | Mumbai    | Average  | Need Help            | Excellent        | Good             | 2024-09-21 10:37:37 |            6 | 2000-04-15 |                      1 | Abcd Matale       | Teacher             | 9685741261           | 380000               | Same as Permanent | Sector 11 Airoli      | path/to/pic.jpg | 2024-01-01   | Active           | Complete BSC-CS      | Bank of Baroda       | CGPA 8.60             | Verified        | All up to Date |
+| 1007 | CIC12345-07 | Sushmita   | Sandip      | Pawar      | sushmitapawar@gmail.com    | Mumbai     | BE-IT   | 2024-03-20 | 9884567845    | 400062            | Mumbai    | Positive | Excellent            | Excellent        | Excellent        | 2024-09-21 10:37:37 |            7 | 2001-03-20 |                      1 | Sandip Pawar      | Government Employee | 9685741262           | 400000               | Same as Permanent | Sector 12 Ghansoli    | path/to/pic.jpg | 2024-03-20   | Active           | Complete BE-IT       | Punjab National Bank | CGPA 9.00             | Verified        | All up to Date |
+| 1008 | CIC12345-08 | Pratik     | Mahendra    | Sawant     | pratiksawant@gmail.com     | Mumbai     | BE-IT   | 2024-03-20 | 9865457852    | 623402            | Mumbai    | Positive | Good                 | Excellent        | Good             | 2024-09-21 10:37:37 |            8 | 2001-07-25 |                      1 | Mahendra Sawant   | Business            | 9685741263           | 420000               | Same as Permanent | Sector 13 Belapur     | path/to/pic.jpg | 2024-03-20   | Active           | Complete BE-IT       | Bank of India        | CGPA 8.80             | Verified        | All up to Date |
+| 1009 | CIC12345-09 | Akash      | Ananda      | Patil      | akash@gmail.com            | Mumbai     | BSC-CS  | 2024-04-15 | 9857423899    | 400100            | Mumbai    | Positive | Good                 | Excellent        | Good             | 2024-09-21 10:37:37 |            9 | 2000-10-30 |                      1 | Ananda Patil      | Doctor              | 9685741264           | 450000               | Same as Permanent | Sector 14 Thane       | path/to/pic.jpg | 2024-04-15   | Active           | Complete BSC-CS      | IDBI Bank            | CGPA 8.70             | Verified        | All up to Date |
+| 1010 | CIC12345-10 | Pranali    | Abcd        | Deware     | pranali@gmail.com          | Mumbai     | MCA     | 2023-12-02 | 9685789865    | 400084            | Mumbai    | Average  | Good                 | Good             | Good             | 2024-09-21 10:37:37 |           10 | 2001-08-20 |                      1 | Abcd Daware       | Engineer            | 9685741265           | 480000               | Same as Permanent | Sector 15 Panvel      | path/to/pic.jpg | 2023-12-02   | Active           | Complete MCA         | Bank of Maharashtra  | CGPA 8.90             | Verified        | All up to Date |
+| 1011 | CIC12345-11 | Tushar     | Shankar     | Jadhav     | tusharjadhav@gmail.com     | Mumbai     | BE-IT   | 2024-03-16 | 8125467896    | 400084            | Mumbai    | Positive | Good                 | Excellent        | Good             | 2024-09-21 10:37:37 |           11 | 2000-10-25 |                      1 | Shankar Jadhav    | Engineer            | 9178654598           | 600000               | Same as Permanent | Sector 16 Vashi       | path/to/pic.jpg | 2024-03-16   | Active           | Complete BE-IT       | HDFC Bank            | CGPA 8.60             | Verified        | All up to Date |
+| 1012 | CIC12345-12 | Saket      | Kumar       | Patil      | saket@gmail.com            | Mumbai     | BE-IT   | 2024-06-20 | 980987699     | 400200            | Mumbai    | Average  | Good                 | Good             | Good             | 2024-09-21 10:37:37 |           12 | 2001-01-05 |                      1 | Kumar Patil       | Business            | 9685741267           | 520000               | Same as Permanent | Sector 17 Airoli      | path/to/pic.jpg | 2024-06-20   | Active           | Complete BE-IT       | Bank of Baroda       | CGPA 8.80             | Verified        | All up to Date |
+| 1013 | CIC12345-13 | Nami       | Ramesh      | Khot       | nami@gmail.com             | Mumbai     | BE-CS   | 2024-07-01 | 9145789865    | 400300            | Mumbai    | Positive | Excellent            | Good             | Good             | 2024-09-21 10:37:37 |           13 | 2000-06-12 |                      1 | Ramesh Khot       | Doctor              | 9685741268           | 540000               | Same as Permanent | Sector 18 Nerul       | path/to/pic.jpg | 2024-07-01   | Active           | Complete BE-CS       | State Bank of India  | CGPA 9.20             | Verified        | All up to Date |
++------+-------------+------------+-------------+------------+----------------------------+------------+---------+------------+---------------+-------------------+-----------+----------+----------------------+------------------+------------------+---------------------+--------------+------------+------------------------+-------------------+---------------------+----------------------+----------------------+-------------------+-----------------------+-----------------+--------------+------------------+----------------------+----------------------+-----------------------+-----------------+----------------+
+13 rows in set (0.01 sec)
+
+
+
+
+mysql> SELECT * FROM Candidate_Bank_Details;
++----+--------------+-------------------+-----------------+----------------------------+-----------+-----------------------+------------+------------------------+--------------+--------------------------+---------------------+--------------+
+| Id | Candidate_ID | Name              | Account_Number  | Is_Account_Number_Verified | Ifsc_Code | Is_Ifsc_Code_Verified | Pan_Number | Is_Pan_Number_Verified | Adhar_Number | Is_Adhar_Number_Verified | Creator_Stamp       | Creator_User |
++----+--------------+-------------------+-----------------+----------------------------+-----------+-----------------------+------------+------------------------+--------------+--------------------------+---------------------+--------------+
+|  1 |         1001 | Rehan Pinjari     | 785412369852147 |                          1 | NAG852365 |                     1 | REHA85214  |                      1 | 741298563214 |                        1 | 2024-09-21 10:39:25 |            1 |
+|  2 |         1002 | Sakshi Jadhav     | 785412369852148 |                          1 | NAG852366 |                     1 | SAJA85215  |                      1 | 741298563215 |                        1 | 2024-09-21 10:39:25 |            2 |
+|  3 |         1003 | Sanket Kalambaste | 785412369852149 |                          1 | NAG852367 |                     1 | SAKA85216  |                      1 | 741298563216 |                        1 | 2024-09-21 10:39:25 |            3 |
+|  4 |         1004 | Vedant Gujarati   | 785412369852150 |                          1 | NAG852368 |                     1 | VEGU85217  |                      1 | 741298563217 |                        1 | 2024-09-21 10:39:25 |            4 |
+|  5 |         1005 | Vaibhav Kumbhar   | 785412369852151 |                          1 | NAG852369 |                     1 | VAKU85218  |                      1 | 741298563218 |                        1 | 2024-09-21 10:39:25 |            5 |
+|  6 |         1006 | Sayali Matale     | 785412369852152 |                          1 | NAG852370 |                     1 | SAMA85219  |                      1 | 741298563219 |                        1 | 2024-09-21 10:39:25 |            6 |
+|  7 |         1007 | Sushmita Pawar    | 785412369852153 |                          1 | NAG852371 |                     1 | SUPA85220  |                      1 | 741298563220 |                        1 | 2024-09-21 10:39:25 |            7 |
+|  8 |         1008 | Pratik Sawant     | 785412369852154 |                          1 | NAG852372 |                     1 | PRSA85221  |                      1 | 741298563221 |                        1 | 2024-09-21 10:39:25 |            8 |
+|  9 |         1009 | Akash Patil       | 785412369852155 |                          1 | NAG852373 |                     1 | AKPA85222  |                      1 | 741298563222 |                        1 | 2024-09-21 10:39:25 |            9 |
+| 10 |         1010 | Pranali Deware    | 785412369852156 |                          1 | NAG852374 |                     1 | PRDE85223  |                      1 | 741298563223 |                        1 | 2024-09-21 10:39:25 |           10 |
++----+--------------+-------------------+-----------------+----------------------------+-----------+-----------------------+------------+------------------------+--------------+--------------------------+---------------------+--------------+
+10 rows in set (0.02 sec)
+
+
+
+
+mysql> SELECT * FROM Candidate_Qualification;
++----+--------------+------------------------+---------------------------------+-------------------------+------------------------+--------------------------------+--------------+--------------------------+----------------------+----------------------------------+-----------------------+-----------------------------------+--------------------+--------------------------------+-------------------------+-------------------------------------+----------------+----------------------------+---------------------+--------------+
+| Id | Candidate_ID | Diploma                | Degree_Name                     | Is_Degree_Name_Verified | Employee_Decipline     | Is_Employee_Decipline_Verified | Passing_Year | Is_Passing_Year_Verified | Aggregate_Percentage | Is_Aggregate_Percentage_Verified | Final_Year_percentage | Is_Final_Year_percentage_Verified | Training_Institute | Is_Training_Institute_Verified | Training_Duration_Month | Is_Training_Duration_Month_Verified | Other_Training | Is_Other_Training_Verified | Creator_Stamp       | Creator_User |
++----+--------------+------------------------+---------------------------------+-------------------------+------------------------+--------------------------------+--------------+--------------------------+----------------------+----------------------------------+-----------------------+-----------------------------------+--------------------+--------------------------------+-------------------------+-------------------------------------+----------------+----------------------------+---------------------+--------------+
+|  1 |         1001 | Mechanical Engineering | Bachelor of Engineering         |                       1 | Mechanical Engineering |                              1 |         2023 |                        1 | NULL                 |                             NULL |                 80.83 |                                 1 | YTCEM              |                              1 | 3 years                 |                                   1 | AWS            |                          1 | 2024-09-21 10:49:18 |            1 |
+|  2 |         1002 | Computer Science       | Bachelor of Engineering         |                       1 | Information Technology |                              1 |         2023 |                        1 | NULL                 |                             NULL |                 82.45 |                                 1 | KJSIEIT            |                              1 | 3 years                 |                                   1 | Azure          |                          1 | 2024-09-21 10:49:18 |            2 |
+|  3 |         1003 | Information Technology | Bachelor of Engineering         |                       1 | Information Technology |                              1 |         2022 |                        1 | NULL                 |                             NULL |                  75.5 |                                 1 | SPIT               |                              1 | 3 years                 |                                   1 | GCP            |                          1 | 2024-09-21 10:49:18 |            3 |
+|  4 |         1004 | Computer Science       | Bachelor of Engineering         |                       1 | Computer Science       |                              1 |         2023 |                        1 | NULL                 |                             NULL |                  88.9 |                                 1 | DJ Sanghvi         |                              1 | 3 years                 |                                   1 | AWS            |                          1 | 2024-09-21 10:49:18 |            4 |
+|  5 |         1005 | Computer Science       | Bachelor of Engineering         |                       1 | Computer Science       |                              1 |         2024 |                        1 | NULL                 |                             NULL |                  76.7 |                                 1 | VESIT              |                              1 | 3 years                 |                                   1 | Azure          |                          1 | 2024-09-21 10:49:18 |            5 |
+|  6 |         1006 | Information Technology | Bachelor of Science             |                       1 | Computer Science       |                              1 |         2024 |                        1 | NULL                 |                             NULL |                    80 |                                 1 | KC College         |                              1 | 3 years                 |                                   1 | GCP            |                          1 | 2024-09-21 10:49:18 |            6 |
+|  7 |         1007 | Information Technology | Bachelor of Engineering         |                       1 | Information Technology |                              1 |         2024 |                        1 | NULL                 |                             NULL |                  85.5 |                                 1 | SIES GST           |                              1 | 3 years                 |                                   1 | AWS            |                          1 | 2024-09-21 10:49:18 |            7 |
+|  8 |         1008 | Information Technology | Bachelor of Engineering         |                       1 | Information Technology |                              1 |         2024 |                        1 | NULL                 |                             NULL |                    77 |                                 1 | Thadomal Shahani   |                              1 | 3 years                 |                                   1 | Azure          |                          1 | 2024-09-21 10:49:18 |            8 |
+|  9 |         1009 | Computer Science       | Bachelor of Science             |                       1 | Computer Science       |                              1 |         2024 |                        1 | NULL                 |                             NULL |                  83.2 |                                 1 | Bhavan's College   |                              1 | 3 years                 |                                   1 | GCP            |                          1 | 2024-09-21 10:49:18 |            9 |
+| 10 |         1010 | Computer Science       | Master of Computer Applications |                       1 | Computer Applications  |                              1 |         2024 |                        1 | NULL                 |                             NULL |                  78.5 |                                 1 | Xavier's Institute |                              1 | 3 years                 |                                   1 | AWS            |                          1 | 2024-09-21 10:49:18 |           10 |
++----+--------------+------------------------+---------------------------------+-------------------------+------------------------+--------------------------------+--------------+--------------------------+----------------------+----------------------------------+-----------------------+-----------------------------------+--------------------+--------------------------------+-------------------------+-------------------------------------+----------------+----------------------------+---------------------+--------------+
+10 rows in set (0.02 sec)
+
+
+
+
+mysql> SELECT * FROM Candidate_Documents;
++----+--------------+---------------------------------------------+--------------+----------+---------------------+--------------+
+| Id | Candidate_ID | Doc_Type                                    | Doc_Path     | Status   | Creator_Stamp       | Creator_User |
++----+--------------+---------------------------------------------+--------------+----------+---------------------+--------------+
+|  1 |         1001 | PAN card,Result,Addhar Card,Any Certificate | path/to/doc/ | Approved | 2024-09-21 10:50:23 |            1 |
+|  2 |         1002 | PAN card,Result,Addhar Card,Any Certificate | path/to/doc/ | Approved | 2024-09-21 10:50:23 |            2 |
+|  3 |         1003 | PAN card,Result,Addhar Card,Any Certificate | path/to/doc/ | Approved | 2024-09-21 10:50:23 |            3 |
+|  4 |         1004 | PAN card,Result,Addhar Card,Any Certificate | path/to/doc/ | Approved | 2024-09-21 10:50:23 |            4 |
+|  5 |         1005 | PAN card,Result,Addhar Card,Any Certificate | path/to/doc/ | Approved | 2024-09-21 10:50:23 |            5 |
+|  6 |         1006 | PAN card,Result,Addhar Card,Any Certificate | path/to/doc/ | Approved | 2024-09-21 10:50:23 |            6 |
+|  7 |         1007 | PAN card,Result,Addhar Card,Any Certificate | path/to/doc/ | Approved | 2024-09-21 10:50:23 |            7 |
+|  8 |         1008 | PAN card,Result,Addhar Card,Any Certificate | path/to/doc/ | Approved | 2024-09-21 10:50:23 |            8 |
+|  9 |         1009 | PAN card,Result,Addhar Card,Any Certificate | path/to/doc/ | Approved | 2024-09-21 10:50:23 |            9 |
+| 10 |         1010 | PAN card,Result,Addhar Card,Any Certificate | path/to/doc/ | Approved | 2024-09-21 10:50:23 |           10 |
++----+--------------+---------------------------------------------+--------------+----------+---------------------+--------------+
+10 rows in set (0.01 sec)
+
+
+
+
+mysql> SELECT * FROM Company;
++-----+---------------------------------------------+----------------------------------------------------------------------+-------------+--------+---------------------+--------------+
+| Id  | Name                                        | Address                                                              | Location    | Status | Creator_Stamp       | Creator_User |
++-----+---------------------------------------------+----------------------------------------------------------------------+-------------+--------+---------------------+--------------+
+| 101 | QualityKiosk Technologies                   | C Wing, Rupa Solitaire, Sector-1, Millennium Business Park           | Navi Mumbai | Active | 2024-09-21 10:51:07 |            1 |
+| 102 | Accenture                                   | 1st, 2nd, 3rd, & 4th Office Level, Building No. 02 Mindspace         | Navi Mumbai | Active | 2024-09-21 10:51:07 |            2 |
+| 103 | ContractPod Solutions Pvt. Ltd              | 2nd Floor, Raheja Platinum, WeWork India, Road, Sag Baug, Marol      | Mumbai      | Active | 2024-09-21 10:51:07 |            3 |
+| 104 | Amazon Web Services India Private Limited   | 1th Floor, Godrej One, Pirojshanagar, Vikhroli                       | Mumbai      | Active | 2024-09-21 10:51:07 |            4 |
+| 105 | Amdocs DVCI                                 | Tower 12, Magarpatta Inner Circle, Cybercity, Magarpatta, Hadapsar   | Pune        | Active | 2024-09-21 10:51:07 |            5 |
+| 106 | Jet2 Travel Technologies Pvt. Ltd.          | 16th floor, Jet2 Travel Technologies Pvt. Ltd, Viman Nagar           | Pune        | Active | 2024-09-21 10:51:07 |            7 |
+| 107 | Capgemini Technology Services India Limited | M6, Capgemini Knowledge Park, Thane - Belapur Rd, Airoli             | Navi Mumbai | Active | 2024-09-21 10:51:07 |            9 |
+| 108 | Zeus Learning                               | Tower B, Peninsula Business Park, Ganapatrao Kadam Marg, Lower Parel | Mumbai      | Active | 2024-09-21 10:51:07 |           10 |
+| 109 | Tata Consultancy Services                   | TCS House, Raveline Street, Fort                                     | Mumbai      | Active | 2024-09-21 10:51:07 |           11 |
+| 110 | Infosys Limited                             | Electronics City, Hosur Road                                         | Bengaluru   | Active | 2024-09-21 10:51:07 |           12 |
++-----+---------------------------------------------+----------------------------------------------------------------------+-------------+--------+---------------------+--------------+
+10 rows in set (0.02 sec)
+
+
+
+
+mysql> SELECT * FROM Tech_Stack;
++-----+------------+------------------------+-----------+------------+---------------------+--------------+
+| Id  | Tech_Name  | Image_Path             | Framework | Cur_Status | Creator_Stamp       | Creator_User |
++-----+------------+------------------------+-----------+------------+---------------------+--------------+
+| 301 | Java       | path/to/java.jpg       | Selenium  | Active     | 2024-09-21 10:52:27 |            1 |
+| 302 | Java       | path/to/java.jpg       | Selenium  | Active     | 2024-09-21 10:52:27 |            2 |
+| 303 | UI/UX      | path/to/uiux.jpg       | Figma     | Active     | 2024-09-21 10:52:27 |            3 |
+| 304 | Java       | path/to/java.jpg       | Selenium  | Active     | 2024-09-21 10:52:27 |            4 |
+| 305 | Java       | path/to/java.jpg       | Selenium  | Active     | 2024-09-21 10:52:27 |            5 |
+| 306 | Python     | path/to/python.jpg     | Django    | Active     | 2024-09-21 10:52:27 |            7 |
+| 307 | Java       | path/to/java.jpg       | Angular   | Active     | 2024-09-21 10:52:27 |            9 |
+| 308 | SQL        | path/to/sql.jpg        | Workbench | Active     | 2024-09-21 10:52:27 |           10 |
+| 309 | JavaScript | path/to/javascript.jpg | React     | Active     | 2024-09-21 10:52:27 |           11 |
+| 310 | Ruby       | path/to/ruby.jpg       | Rails     | Active     | 2024-09-21 10:52:27 |           12 |
++-----+------------+------------------------+-----------+------------+---------------------+--------------+
+10 rows in set (0.01 sec)
+
+
+
+
+mysql> SELECT * FROM Tech_Type;
++-----+----------------+------------+---------------------+--------------+
+| Id  | Type_Name      | Cur_Status | Creator_Stamp       | Creator_User |
++-----+----------------+------------+---------------------+--------------+
+| 401 | Automation     | Active     | 2024-09-21 10:55:38 |            1 |
+| 402 | Automation     | Active     | 2024-09-21 10:55:38 |            2 |
+| 403 | Graphics       | Active     | 2024-09-21 10:55:38 |            3 |
+| 404 | Automation     | Active     | 2024-09-21 10:55:38 |            4 |
+| 405 | Automation     | Active     | 2024-09-21 10:55:38 |            5 |
+| 406 | Developer      | Active     | 2024-09-21 10:55:38 |            7 |
+| 407 | Automation     | Active     | 2024-09-21 10:55:38 |            9 |
+| 408 | Developer      | Active     | 2024-09-21 10:55:38 |           10 |
+| 409 | Data Science   | Active     | 2024-09-21 10:55:38 |           11 |
+| 410 | Cyber Security | Active     | 2024-09-21 10:55:38 |           12 |
++-----+----------------+------------+---------------------+--------------+
+10 rows in set (0.01 sec)
+
+
+
+
+mysql> SELECT * FROM Lab;
++-----+--------------+-----------+-------------------------+--------+---------------------+--------------+
+| Id  | Name         | Location  | Address                 | Status | Creator_Stamp       | Creator_User |
++-----+--------------+-----------+-------------------------+--------+---------------------+--------------+
+| 501 | BL Mumbai    | Mumbai    | Address of Mumbai BL    | Active | 2024-09-21 10:56:26 |            1 |
+| 502 | BL Mumbai    | Mumbai    | Address of Mumbai BL    | Active | 2024-09-21 10:56:26 |            2 |
+| 503 | BL Pune      | Pune      | Address of Pune BL      | Active | 2024-09-21 10:56:26 |            3 |
+| 504 | BL Pune      | Pune      | Address of Pune BL      | Active | 2024-09-21 10:56:26 |            4 |
+| 505 | BL Bengalore | Bengalore | Address of Bengalore BL | Active | 2024-09-21 10:56:26 |            5 |
+| 506 | BL Bengalore | Bengalore | Address of Bengalore BL | Active | 2024-09-21 10:56:26 |            7 |
+| 507 | BL Mumbai    | Mumbai    | Address of Mumbai BL    | Active | 2024-09-21 10:56:26 |            9 |
+| 508 | BL Pune      | Pune      | Address of Pune BL      | Active | 2024-09-21 10:56:26 |           10 |
+| 509 | BL Delhi     | Delhi     | Address of Delhi BL     | Active | 2024-09-21 10:56:26 |           11 |
+| 510 | BL Chennai   | Chennai   | Address of Chennai BL   | Active | 2024-09-21 10:56:26 |           12 |
++-----+--------------+-----------+-------------------------+--------+---------------------+--------------+
+10 rows in set (0.01 sec)
+
+
+
+
+mysql> SELECT * FROM Lab_Threshold;
++----+--------+--------------+----------------+-------------------------+----------------------+--------+---------------------+--------------+
+| Id | Lab_Id | Lab_Capacity | Lead_Threshold | Ideation_Engg_Threshold | Buddy_Engg_Threshold | Status | Creator_Stamp       | Creator_User |
++----+--------+--------------+----------------+-------------------------+----------------------+--------+---------------------+--------------+
+|  1 |    501 |          120 |             19 |                       9 |                    8 | ACTV   | 2024-09-21 10:57:43 |            1 |
+|  2 |    502 |          120 |             19 |                       8 |                    9 | ACTV   | 2024-09-21 10:57:43 |            2 |
+|  3 |    503 |           57 |             13 |                       7 |                    9 | ACTV   | 2024-09-21 10:57:43 |            3 |
+|  4 |    504 |           57 |             13 |                       8 |                   11 | ACTV   | 2024-09-21 10:57:43 |            4 |
+|  5 |    505 |           38 |             11 |                       7 |                    8 | ACTV   | 2024-09-21 10:57:43 |            5 |
+|  6 |    506 |           38 |             11 |                       8 |                    7 | ACTV   | 2024-09-21 10:57:43 |            7 |
+|  7 |    507 |          120 |             19 |                       9 |                    8 | ACTV   | 2024-09-21 10:57:43 |            9 |
+|  8 |    508 |           57 |             13 |                       8 |                    9 | ACTV   | 2024-09-21 10:57:43 |           10 |
+|  9 |    509 |          120 |             19 |                       9 |                    8 | ACTV   | 2024-09-21 10:57:43 |           11 |
+| 10 |    510 |           57 |             13 |                       8 |                   11 | ACTV   | 2024-09-21 10:57:43 |           12 |
++----+--------+--------------+----------------+-------------------------+----------------------+--------+---------------------+--------------+
+10 rows in set (0.01 sec)
+
+
+
+
+mysql> SELECT * From Maker_Program;
++----+-------------------+---------------------+----------------------------------------+---------------+--------------+---------------------+-------------------------------------+--------+---------------------+--------------+
+| Id | Program_Name      | Program_Type        | Program_Link                           | Tech_Stack_Id | Tech_Type_Id | Is_Program_Approved | Description                         | Status | Creator_Stamp       | Creator_User |
++----+-------------------+---------------------+----------------------------------------+---------------+--------------+---------------------+-------------------------------------+--------+---------------------+--------------+
+|  1 | SDET              | Automation Testing  | https://www.sdet.com                   |           301 |          401 |                   1 | Manual & Automation Testing         | Active | 2024-09-21 10:59:27 |            1 |
+|  2 | SDET              | Automation Testing  | https://www.sdet.com                   |           302 |          402 |                   1 | Manual & Automation Testing         | Active | 2024-09-21 10:59:27 |            2 |
+|  3 | UI/Ux             | Graphics Design     | https://www.uiux.com                   |           303 |          403 |                   1 | UI Design with Abode XD & Figma     | Active | 2024-09-21 10:59:27 |            3 |
+|  4 | SDET              | Automation Testing  | https://www.sdet.com                   |           304 |          404 |                   1 | Manual & Automation Testing         | Active | 2024-09-21 10:59:27 |            4 |
+|  5 | SDET              | Automation Testing  | https://www.sdet.com                   |           305 |          405 |                   1 | Manual & Automation Testing         | Active | 2024-09-21 10:59:27 |            5 |
+|  6 | Python            | Python Developer    | https://www.python.com                 |           306 |          406 |                   1 | Python, Numpy,Boto3                 | Active | 2024-09-21 10:59:27 |            7 |
+|  7 | Java              | FullStack Developer | https://www.javafullstackdeveloper.com |           307 |          407 |                   1 | Java,Angular,Sql,JDBC               | Active | 2024-09-21 10:59:27 |            9 |
+|  8 | SQL               | SQL Developer       | https://www.sqldeveloper.com           |           308 |          408 |                   1 | SQL,Workbench,oracle database       | Active | 2024-09-21 10:59:27 |           10 |
+|  9 | JavaEE            | FullStack Developer | https://www.javaee.com                 |           301 |          401 |                   1 | Java Enterprise Edition Development | Active | 2024-09-21 10:59:27 |           11 |
+| 10 | Python Automation | Automation Testing  | https://www.pythonautomation.com       |           302 |          402 |                   1 | Python Automation with Selenium     | Active | 2024-09-21 10:59:27 |           12 |
++----+-------------------+---------------------+----------------------------------------+---------------+--------------+---------------------+-------------------------------------+--------+---------------------+--------------+
+10 rows in set (0.01 sec)
+
+
+
+
+mysql> SELECT * FROM App_Parameters;
++----+--------------+-----------+------------+------------+--------------+---------------------+---------------------+--------------+---------+
+| Id | Key_Type     | Key_Value | Key_Text   | Cur_Status | Lastupd_User | Lastupd_Stamp       | Creator_Stamp       | Creator_User | Seq_Num |
++----+--------------+-----------+------------+------------+--------------+---------------------+---------------------+--------------+---------+
+|  1 | DOC_STATUS   | PND       | Pending    | ACTV       | 1            | 2024-09-21 11:00:44 | 2024-09-21 11:00:44 |            1 |       1 |
+|  2 | DOC_STATUS   | RCEVD     | Received   | ACTV       | 2            | 2024-09-21 11:00:44 | 2024-09-21 11:00:44 |            2 |       2 |
+|  3 | CUR_STATUS   | ACTV      | Active     | ACTV       | 3            | 2024-09-21 11:00:44 | 2024-09-21 11:00:44 |            3 |       1 |
+|  4 | CUR_STATUS   | IACTV     | Inactive   | ACTV       | 4            | 2024-09-21 11:00:44 | 2024-09-21 11:00:44 |            4 |       1 |
+|  5 | BATCH_STATUS | INPROCESS | In Process | ACTV       | 5            | 2024-09-21 11:00:44 | 2024-09-21 11:00:44 |            5 |       1 |
+|  6 | BATCH_STATUS | HOLD      | Hold       | ACTV       | 7            | 2024-09-21 11:00:44 | 2024-09-21 11:00:44 |            7 |       2 |
+|  7 | BATCH_STATUS | COMPL     | Completed  | ACTV       | 9            | 2024-09-21 11:00:44 | 2024-09-21 11:00:44 |            9 |       3 |
+|  8 | DOC_STATUS   | RCEVD     | Received   | ACTV       | 10           | 2024-09-21 11:00:44 | 2024-09-21 11:00:44 |           10 |       3 |
+|  9 | DOC_STATUS   | DPLCT     | Duplicate  | ACTV       | 11           | 2024-09-21 11:00:44 | 2024-09-21 11:00:44 |           11 |       4 |
+| 10 | BATCH_STATUS | CANCL     | Cancelled  | ACTV       | 12           | 2024-09-21 11:00:44 | 2024-09-21 11:00:44 |           12 |       5 |
++----+--------------+-----------+------------+------------+--------------+---------------------+---------------------+--------------+---------+
+10 rows in set (0.01 sec)
+
+
+
+
+mysql> SELECT * FROM Mentor;
++----+-----------+--------------------+--------+--------+---------------------+--------------+
+| Id | Name      | Mentor_Type        | Lab_Id | Status | Creator_Stamp       | Creator_User |
++----+-----------+--------------------+--------+--------+---------------------+--------------+
+|  1 | Sunil     | Lead/Practice head |    501 | ACTV   | 2024-09-21 11:01:49 |            1 |
+|  2 | Venkat    | Support Mentor     |    505 | ACTV   | 2024-09-21 11:01:49 |            2 |
+|  3 | Pooja     | Support Mentor     |    503 | ACTV   | 2024-09-21 11:01:49 |            3 |
+|  4 | Aishwarya | Buddy Mentor       |    505 | ACTV   | 2024-09-21 11:01:49 |            4 |
+|  5 | Gunjan    | Lead/Practice head |    501 | ACTV   | 2024-09-21 11:01:49 |            5 |
+|  6 | Nagendra  | Support Mentor     |    505 | ACTV   | 2024-09-21 11:01:49 |            7 |
+|  7 | Roshni    | Support Mentor     |    503 | ACTV   | 2024-09-21 11:01:49 |            9 |
+|  8 | Sudhakar  | Lead/Practice head |    501 | ACTV   | 2024-09-21 11:01:49 |           10 |
+|  9 | Aashish   | Buddy Mentor       |    506 | ACTV   | 2024-09-21 11:01:49 |           11 |
+| 10 | Atheesham | Support Mentor     |    507 | ACTV   | 2024-09-21 11:01:49 |           12 |
++----+-----------+--------------------+--------+--------+---------------------+--------------+
+10 rows in set (0.01 sec)
+
+
+
+
+mysql> SELECT * FROM Mentor_Ideation_Map;
++----+------------------+-----------+--------+---------------------+--------------+
+| Id | Parent_Mentor_Id | Mentor_Id | Status | Creator_Stamp       | Creator_User |
++----+------------------+-----------+--------+---------------------+--------------+
+|  1 |                1 |         3 | ACTV   | 2024-09-21 11:02:53 |            1 |
+|  2 |                1 |         3 | ACTV   | 2024-09-21 11:02:53 |            2 |
+|  3 |                2 |         6 | ACTV   | 2024-09-21 11:02:53 |            3 |
+|  4 |                8 |         7 | ACTV   | 2024-09-21 11:02:53 |            4 |
+|  5 |                8 |         7 | ACTV   | 2024-09-21 11:02:53 |            5 |
+|  6 |                5 |         3 | ACTV   | 2024-09-21 11:02:53 |            7 |
+|  7 |                5 |         6 | ACTV   | 2024-09-21 11:02:53 |            9 |
+|  8 |                1 |         7 | ACTV   | 2024-09-21 11:02:53 |           10 |
+|  9 |               10 |         8 | ACTV   | 2024-09-21 11:02:53 |           11 |
+| 10 |                9 |         6 | ACTV   | 2024-09-21 11:02:53 |           12 |
++----+------------------+-----------+--------+---------------------+--------------+
+10 rows in set (0.01 sec)
+
+
+
+
+mysql> SELECT * FROM Mentor_Tech_Stack;
++----+-----------+---------------+--------+---------------------+--------------+
+| Id | Mentor_Id | Tech_Stack_Id | Status | Creator_Stamp       | Creator_User |
++----+-----------+---------------+--------+---------------------+--------------+
+|  1 |         1 |           301 | ACTV   | 2024-09-21 11:03:31 |            1 |
+|  2 |         2 |           302 | ACTV   | 2024-09-21 11:03:31 |            2 |
+|  3 |         3 |           303 | ACTV   | 2024-09-21 11:03:31 |            3 |
+|  4 |         4 |           304 | ACTV   | 2024-09-21 11:03:31 |            4 |
+|  5 |         5 |           305 | ACTV   | 2024-09-21 11:03:31 |            5 |
+|  6 |         6 |           306 | ACTV   | 2024-09-21 11:03:31 |            7 |
+|  7 |         7 |           307 | ACTV   | 2024-09-21 11:03:31 |            9 |
+|  8 |         8 |           308 | ACTV   | 2024-09-21 11:03:31 |           10 |
+|  9 |         9 |           301 | ACTV   | 2024-09-21 11:03:31 |           11 |
+| 10 |        10 |           302 | ACTV   | 2024-09-21 11:03:31 |           12 |
++----+-----------+---------------+--------+---------------------+--------------+
+10 rows in set (0.01 sec)
+
+
+
+
+mysql> SELECT * FROM Company_Requirement;
++------+------------+-----------------+-------------+---------------------+----------------------+------------+---------------+--------------+------------------+---------+------------------+---------------+------------------+--------+---------------------+--------------+
+| Id   | Company_Id | Requested_Month | City        | Is_Doc_Verification | Requirement_Doc_Path | No_Of_Engg | Tech_Stack_Id | Tech_Type_Id | Maker_Program_Id | Lead_Id | Ideation_Engg_Id | Buddy_Engg_Id | Special_Remark   | Status | Creator_Stamp       | Creator_User |
++------+------------+-----------------+-------------+---------------------+----------------------+------------+---------------+--------------+------------------+---------+------------------+---------------+------------------+--------+---------------------+--------------+
+|  111 |        101 | 2024-08-03      | Mumbai      |                   1 | /path/to/doc.pdf     |         12 |           301 |          401 |                1 |       1 |                2 |             4 | Good in Java     | Active | 2024-09-21 11:09:23 |            1 |
+|  222 |        102 | 2023-11-12      | Mumbai      |                   1 | /path/to/doc.pdf     |         15 |           302 |          402 |                2 |       1 |                2 |             4 | Good in Logic    | Active | 2024-09-21 11:09:23 |            2 |
+|  333 |        103 | 2024-01-19      | Bengalore   |                   1 | /path/to/doc.pdf     |         23 |           303 |          403 |                3 |       8 |                7 |             4 | Good in Graphics | Active | 2024-09-21 11:09:23 |            3 |
+|  444 |        104 | 2019-12-28      | Pune        |                   1 | /path/to/doc.pdf     |         28 |           304 |          404 |                4 |       5 |                3 |             4 | Good in Logic    | Active | 2024-09-21 11:09:23 |            4 |
+|  555 |        105 | 2023-08-03      | Navi Mumbai |                   1 | /path/to/doc.pdf     |         14 |           305 |          405 |                5 |       5 |                3 |             4 | Good in Java     | Active | 2024-09-21 11:09:23 |            5 |
+|  666 |        106 | 2024-04-22      | Mumbai      |                   1 | /path/to/doc.pdf     |         12 |           306 |          406 |                6 |       1 |                2 |             4 | Good in Python   | Active | 2024-09-21 11:09:23 |            7 |
+|  777 |        107 | 2023-10-02      | Mumbai      |                   1 | /path/to/doc.pdf     |         23 |           307 |          407 |                7 |       8 |                7 |             4 | Good in Logic    | Active | 2024-09-21 11:09:23 |            9 |
+|  888 |        108 | 2024-02-14      | Navi Mumbai |                   1 | /path/to/doc.pdf     |         12 |           308 |          408 |                8 |       1 |                2 |             4 | Good in SQL      | Active | 2024-09-21 11:09:23 |           10 |
+|  999 |        101 | 2024-09-15      | Pune        |                   1 | /path/to/docs.pdf    |         18 |           301 |          401 |                1 |       1 |                2 |             4 | Skilled in Java  | Active | 2024-09-21 11:09:23 |           11 |
+| 1010 |        102 | 2023-10-20      | Pune        |                   1 | /path/to/docs.pdf    |         20 |           302 |          402 |                2 |       1 |                2 |             4 | Good in Web Tech | Active | 2024-09-21 11:09:23 |           12 |
++------+------------+-----------------+-------------+---------------------+----------------------+------------+---------------+--------------+------------------+---------+------------------+---------------+------------------+--------+---------------------+--------------+
+10 rows in set (0.02 sec)
+
+
+
+
+mysql> SELECT * FROM Candidate_Stack_Assignment;
++----+----------------+--------------+-------------+---------------+-----------+---------------------+--------------+
+| Id | Requirement_Id | Candidate_Id | Assign_Date | Complete_Date | Status    | Creator_Stamp       | Creator_User |
++----+----------------+--------------+-------------+---------------+-----------+---------------------+--------------+
+|  1 |            111 |         1001 | 2024-03-18  | 2024-05-18    | Completed | 2024-09-21 11:10:06 |            1 |
+|  2 |            222 |         1002 | 2024-04-18  | 2024-07-18    | Pending   | 2024-09-21 11:10:06 |            2 |
+|  3 |            333 |         1003 | 2019-08-05  | 2019-12-03    | Completed | 2024-09-21 11:10:06 |            3 |
+|  4 |            444 |         1004 | 2023-06-19  | 2023-11-10    | Completed | 2024-09-21 11:10:06 |            4 |
+|  5 |            555 |         1005 | 2024-01-03  | 2024-05-18    | Completed | 2024-09-21 11:10:06 |            5 |
+|  6 |            666 |         1006 | 2023-11-04  | 2024-03-15    | Completed | 2024-09-21 11:10:06 |            7 |
+|  7 |            777 |         1007 | 2024-02-13  | 2024-06-27    | Pending   | 2024-09-21 11:10:06 |            9 |
+|  8 |            888 |         1008 | 2024-02-13  | 2024-06-27    | Pending   | 2024-09-21 11:10:06 |           10 |
+|  9 |            999 |         1009 | 2024-07-15  | 2024-12-31    | Pending   | 2024-09-21 11:10:06 |           11 |
+| 10 |           1010 |         1010 | 2024-08-01  | 2024-07-12    | Active    | 2024-09-21 11:10:06 |           12 |
++----+----------------+--------------+-------------+---------------+-----------+---------------------+--------------+
+10 rows in set (0.01 sec)
+
+
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+                                                                       QUERIES
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+-------- find all candidate having java technology ----------
+
+mysql> SELECT Hired_Candidate.*,tech_stack.Tech_Name FROM Hired_Candidate
+    -> LEFT JOIN Tech_Stack
+    -> ON Hired_Candidate.Creator_User = tech_stack.Creator_User
+    -> WHERE tech_stack.Tech_Name = "java";
++----+------------+-------------+-----------+--------------------------+------------+---------+------------+---------------+-------------------+-----------+----------+----------------------+------------------+------------------+----------+---------------------+--------------+-----------+
+| Id | First_Name | Middle_Name | Last_Name | Email_Id                 | Hired_City | Degree  | Hired_Date | Mobile_Number | Permanent_Pincode | Hired_Lab | Attitude | Communication_Remark | Knowledge_Remark | Aggregate_Remark | Status   | Creator_Stamp       | Creator_User | Tech_Name |
++----+------------+-------------+-----------+--------------------------+------------+---------+------------+---------------+-------------------+-----------+----------+----------------------+------------------+------------------+----------+---------------------+--------------+-----------+
+|  1 | Rehan      | Javed       | Pinjari   | pinjarirehan07@gmail.com | Mumbai     | BE-Mech | 2023-04-02 | 8421620220    | 623458            | Mumbai    | Positive | Good                 | Good             | Good             | Accepted | 2024-09-21 10:30:14 |            1 | Java      |
+|  2 | Sakshi     | Shankar     | Jadhav    | sakshijadhav@gmail.com   | Mumbai     | BE-IT   | 2024-05-12 | 9178654596    | 785412            | Mumbai    | Positive | Excellent            | Excellent        | Excellent        | Accepted | 2024-09-21 10:30:14 |            2 | Java      |
+|  4 | Vedant     | Abcd        | Gujarati  | vedantgujarati@gmail.com | Mumbai     | BE-CS   | 2023-06-14 | 7098325648    | 623462            | Mumbai    | Positive | Excellent            | Excellent        | Excellent        | Accepted | 2024-09-21 10:30:14 |            4 | Java      |
+|  5 | Vaibhav    | Abcd        | Kumbhar   | vaibhav15@gmail.com      | Mumbai     | BE-CS   | 2024-01-01 | 7078451296    | 400065            | Mumbai    | Average  | Good                 | Good             | Good             | Accepted | 2024-09-21 10:30:14 |            5 | Java      |
+|  9 | Akash      | Ananda      | Patil     | akash@gmail.com          | Mumbai     | BSC-CS  | 2024-04-15 | 9857423899    | 400100            | Mumbai    | Positive | Good                 | Excellent        | Good             | Accepted | 2024-09-21 10:30:14 |            9 | Java      |
++----+------------+-------------+-----------+--------------------------+------------+---------+------------+---------------+-------------------+-----------+----------+----------------------+------------------+------------------+----------+---------------------+--------------+-----------+
+5 rows in set (0.02 sec)
+
+
+
+
+------- find all mentors and ideations have java technology ---------
+
+mysql> SELECT mentor.Name,mentor.Mentor_Type,tech_stack.Tech_Name FROM mentor
+    -> LEFT JOIN tech_stack
+    -> ON mentor.Creator_User = tech_stack.Creator_User
+    -> WHERE tech_stack.Tech_Name = "Java";
++-----------+--------------------+-----------+
+| Name      | Mentor_Type        | Tech_Name |
++-----------+--------------------+-----------+
+| Sunil     | Lead/Practice head | Java      |
+| Venkat    | Support Mentor     | Java      |
+| Aishwarya | Buddy Mentor       | Java      |
+| Gunjan    | Lead/Practice head | Java      |
+| Roshni    | Support Mentor     | Java      |
++-----------+--------------------+-----------+
+5 rows in set (0.02 sec)
+
+
+
+
+------ find name of candidate which did not assign technology ----------
+
+mysql> SELECT hired_candidate.First_Name,hired_candidate.Last_Name,tech_stack.Tech_Name FROM hired_candidate
+    -> LEFT JOIN tech_stack
+    -> ON hired_candidate.Creator_User = tech_stack.Creator_User
+    -> WHERE tech_stack.Tech_Name = " ";
+Empty set (0.01 sec)
+
+
+
+
+------- find name of candidate which is not submit documents------------
+
+ mysql> SELECT hired_candidate.First_Name,hired_candidate.Last_Name,candidate_documents.Status FROM hired_candidate
+     ->  LEFT JOIN candidate_documents
+     -> ON hired_candidate.Creator_User = candidate_documents.Creator_User
+     -> WHERE candidate_documents.Status = "Pending";
+ Empty set (0.02 sec)
+
+
+
+
+------- find name of candidate which is not submit bank details ---------
+
+ mysql> SELECT hired_candidate.First_Name,hired_candidate.Last_Name,candidate_bank_details.Candidate_Id FROM hired_candidate
+     -> LEFT JOIN candidate_bank_details
+     -> ON hired_candidate.Creator_User = candidate_bank_details.Creator_User
+     -> WHERE candidate_bank_details.Account_Number = " " And candidate_bank_details.Ifsc_Code = " ";
+ Empty set (0.01 sec)
+
+
+
+
+------ find name of candidates which is joined in dec month ------
+
+mysql> SELECT fellowship_candidate.First_Name,fellowship_candidate.Middle_Name,fellowship_candidate.Last_Name FROM fellowship_candidate
+     -> WHERE MONTH(fellowship_candidate.Hired_Date) = 12;
+ +------------+-------------+-----------+
+ | First_Name | Middle_Name | Last_Name |
+ +------------+-------------+-----------+
+ | Pranali    | Abcd        | Deware    |
+ +------------+-------------+-----------+
+ 1 row in set (0.02 sec)
+
+
+
+
+------- find name of candidates which is end of course in feb --------
+
+ mysql> SELECT fellowship_candidate.First_Name,fellowship_candidate.Middle_Name,fellowship_candidate.Last_Name FROM fellowship_candidate
+     -> WHERE MONTH(DATE_ADD(fellowship_candidate.Hired_Date,INTERVAL 3 MONTH))=2;
+ Empty set (0.01 sec)
+
+
+
+
+-- find name of candidates which is ending date accounting to joining date if joining date is 22-02-2019 --
+
+ mysql> SELECT fellowship_candidate.First_Name,fellowship_candidate.Middle_Name,fellowship_candidate.Last_Name,fellowship_candidate.Hired_Date FROM fellowship_candidate
+     -> WHERE MONTH(DATE_ADD(fellowship_candidate.Hired_Date,INTERVAL 3 MONTH)) = '2019-02-22';
+ Empty set, 1 warning (0.01 sec)
+
+
+
+
+----- find all candidates which is passed out in 2019 year -------
+
+ mysql> SELECT fellowship_candidate.First_Name,fellowship_candidate.Middle_Name,fellowship_candidate.Last_Name,Candidate_Qualification.Passing_Year FROM fellowship_candidate
+     ->  LEFT JOIN candidate_qualification
+     -> ON fellowship_candidate.Creator_User = candidate_qualification.Creator_User
+     -> WHERE candidate_qualification.Passing_Year = 2019;
+ Empty set (0.01 sec)
+
+
+
+
+----- which technology assign to which candidates which is having MCA background -------
+
+ mysql> SELECT hired_candidate.First_Name,hired_candidate.Middle_Name,hired_candidate.Last_Name,hired_candidate.Degree,tech_stack.Tech_Name FROM hired_candidate
+     -> LEFT JOIN tech_stack
+     -> ON hired_candidate.Creator_User = tech_stack.Creator_User
+     -> WHERE hired_candidate.Degree = "MCA";
+ +------------+-------------+-----------+--------+-----------+
+ | First_Name | Middle_Name | Last_Name | Degree | Tech_Name |
+ +------------+-------------+-----------+--------+-----------+
+ | Pranali    | Abcd        | Deware    | MCA    | SQL       |
+ +------------+-------------+-----------+--------+-----------+
+ 1 row in set (0.02 sec)
+
+
+
+
+-- how many candidates which is having last month --
+
+ mysql> SELECT COUNT(fellowship_candidate.First_Name) AS Last_Month_Count
+     -> FROM fellowship_candidate
+     -> WHERE DATE_ADD(fellowship_candidate.Hired_Date, INTERVAL 3 MONTH)
+     -> BETWEEN '2024-05-01' AND '2024-06-30';
+ +------------------+
+ | Last_Month_Count |
+ +------------------+
+ |                3 |
+ +------------------+
+ 1 row in set (0.01 sec)
+
+
+
+
+-- how many week candidate completed in the bridgelabz since joining date candidate id is 2 --
+
+ mysql> SELECT fellowship_candidate.First_Name,fellowship_candidate.Last_Name,fellowship_candidate.Hired_Date,FLOOR(DATEDIFF(CURDATE(),fellowship_candidate.Hired_Date)/7) AS Completed_Weeks
+     -> FROM fellowship_candidate WHERE fellowship_candidate.Id = 1002;
+ +------------+-----------+------------+-----------------+
+ | First_Name | Last_Name | Hired_Date | Completed_Weeks |
+ +------------+-----------+------------+-----------------+
+ | Sakshi     | Jadhav    | 2024-05-12 |              18 |
+ +------------+-----------+------------+-----------------+
+ 1 row in set (0.01 sec)
+
+
+
+
+-- find joining date of candidate if candidate id is 4 --
+
+ mysql> SELECT fellowship_candidate.First_Name,fellowship_candidate.Last_Name,fellowship_candidate.Hired_Date FROM fellowship_candidate
+     -> WHERE fellowship_candidate.Id = 1004;
+ +------------+-----------+------------+
+ | First_Name | Last_Name | Hired_Date |
+ +------------+-----------+------------+
+ | Vedant     | Gujarati  | 2023-06-14 |
+ +------------+-----------+------------+
+ 1 row in set (0.00 sec)
+
+
+
+
+-- how many week remaining of candidate in the bridglabz from today if candidate id is 5 --
+
+ mysql> SELECT fellowship_candidate.First_Name,fellowship_candidate.Last_Name,FLOOR(DATEDIFF(CURDATE(),DATE_ADD(fellowship_candidate.Hired_Date,INTERVAL 3 MONTH)/7)) AS Remaining_Weeks
+     -> FROM fellowship_candidate WHERE fellowship_candidate.Id = 1005;
+ +------------+-----------+-----------------+
+ | First_Name | Last_Name | Remaining_Weeks |
+ +------------+-----------+-----------------+
+ | Vaibhav    | Kumbhar   |            NULL |
+ +------------+-----------+-----------------+
+ 1 row in set, 1 warning (0.01 sec)
+
+
+
+
+-- how many days remaining of candidate in the bridgelabz from today if candidate is is 6 --
+
+ mysql> SELECT fellowship_candidate.First_Name,fellowship_candidate.Last_Name,DATEDIFF(DATE_ADD(fellowship_candidate.Hired_Date,INTERVAL 3 MONTH),CURDATE()) AS Remaining_Days
+     -> FROM fellowship_candidate WHERE fellowship_candidate.Id = 1006;
+ +------------+-----------+----------------+
+ | First_Name | Last_Name | Remaining_Days |
+ +------------+-----------+----------------+
+ | Sayali     | Matale    |           -173 |
+ +------------+-----------+----------------+
+ 1 row in set (0.00 sec)
+
+
+
+
+-- find candidates which is deployed --
+
+ mysql> SELECT fellowship_candidate.First_Name,fellowship_candidate.Last_Name FROM fellowship_candidate
+     -> JOIN company_requirement ON fellowship_candidate.Creator_User = company_requirement.Creator_User
+     -> JOIN candidate_stack_assignment ON fellowship_candidate.Creator_User = candidate_stack_assignment.Creator_User
+     -> WHERE candidate_stack_assignment.Complete_Date > company_requirement.Requested_Month;
+ +------------+-----------+
+ | First_Name | Last_Name |
+ +------------+-----------+
+ | Sakshi     | Jadhav    |
+ | Vedant     | Gujarati  |
+ | Vaibhav    | Kumbhar   |
+ | Akash      | Patil     |
+ | Pranali    | Deware    |
+ | Tushar     | Jadhav    |
+ | Saket      | Patil     |
+ +------------+-----------+
+ 7 rows in set (0.03 sec)
+
+
+
+
+-- find name and other details and name of company which is assign to condidate --
+
+ mysql> SELECT fellowship_candidate.First_Name,fellowship_candidate.Last_Name,company.* FROM fellowship_candidate
+     -> JOIN company ON fellowship_candidate.Creator_User = company.Creator_User;
+ +------------+------------+-----+---------------------------------------------+----------------------------------------------------------------------+-------------+--------+---------------------+--------------+
+ | First_Name | Last_Name  | Id  | Name                                        | Address                                                              | Location    | Status | Creator_Stamp       | Creator_User |
+ +------------+------------+-----+---------------------------------------------+----------------------------------------------------------------------+-------------+--------+---------------------+--------------+
+ | Rehan      | Pinjari    | 101 | QualityKiosk Technologies                   | C Wing, Rupa Solitaire, Sector-1, Millennium Business Park           | Navi Mumbai | Active | 2024-09-21 10:51:07 |            1 |
+ | Sakshi     | Jadhav     | 102 | Accenture                                   | 1st, 2nd, 3rd, & 4th Office Level, Building No. 02 Mindspace         | Navi Mumbai | Active | 2024-09-21 10:51:07 |            2 |
+ | Sanket     | Kalambaste | 103 | ContractPod Solutions Pvt. Ltd              | 2nd Floor, Raheja Platinum, WeWork India, Road, Sag Baug, Marol      | Mumbai      | Active | 2024-09-21 10:51:07 |            3 |
+ | Vedant     | Gujarati   | 104 | Amazon Web Services India Private Limited   | 1th Floor, Godrej One, Pirojshanagar, Vikhroli                       | Mumbai      | Active | 2024-09-21 10:51:07 |            4 |
+ | Vaibhav    | Kumbhar    | 105 | Amdocs DVCI                                 | Tower 12, Magarpatta Inner Circle, Cybercity, Magarpatta, Hadapsar   | Pune        | Active | 2024-09-21 10:51:07 |            5 |
+ | Sushmita   | Pawar      | 106 | Jet2 Travel Technologies Pvt. Ltd.          | 16th floor, Jet2 Travel Technologies Pvt. Ltd, Viman Nagar           | Pune        | Active | 2024-09-21 10:51:07 |            7 |
+ | Akash      | Patil      | 107 | Capgemini Technology Services India Limited | M6, Capgemini Knowledge Park, Thane - Belapur Rd, Airoli             | Navi Mumbai | Active | 2024-09-21 10:51:07 |            9 |
+ | Pranali    | Deware     | 108 | Zeus Learning                               | Tower B, Peninsula Business Park, Ganapatrao Kadam Marg, Lower Parel | Mumbai      | Active | 2024-09-21 10:51:07 |           10 |
+ | Tushar     | Jadhav     | 109 | Tata Consultancy Services                   | TCS House, Raveline Street, Fort                                     | Mumbai      | Active | 2024-09-21 10:51:07 |           11 |
+ | Saket      | Patil      | 110 | Infosys Limited                             | Electronics City, Hosur Road                                         | Bengaluru   | Active | 2024-09-21 10:51:07 |           12 |
+ +------------+------------+-----+---------------------------------------------+----------------------------------------------------------------------+-------------+--------+---------------------+--------------+
+ 10 rows in set (0.01 sec)
+
+
+
+
+-- find all condidate and mentors which is related to lab= banglore/mumbai/pune --
+
+ mysql> SELECT fellowship_candidate.First_Name,fellowship_candidate.Last_Name,mentor.Name,lab.Location FROM fellowship_candidate
+     -> JOIN mentor ON fellowship_candidate.Creator_User = mentor.Creator_User
+     -> JOIN lab ON fellowship_candidate.Creator_User = lab.Creator_User
+     -> WHERE lab.Location IN ("Mumbai","Pune","Bengalore");
+ +------------+------------+-----------+-----------+
+ | First_Name | Last_Name  | Name      | Location  |
+ +------------+------------+-----------+-----------+
+ | Rehan      | Pinjari    | Sunil     | Mumbai    |
+ | Sakshi     | Jadhav     | Venkat    | Mumbai    |
+ | Sanket     | Kalambaste | Pooja     | Pune      |
+ | Vedant     | Gujarati   | Aishwarya | Pune      |
+ | Vaibhav    | Kumbhar    | Gunjan    | Bengalore |
+ | Sushmita   | Pawar      | Nagendra  | Bengalore |
+ | Akash      | Patil      | Roshni    | Mumbai    |
+ | Pranali    | Deware     | Sudhakar  | Pune      |
+ +------------+------------+-----------+-----------+
+ 8 rows in set (0.02 sec)
+
+
+
+
+-- find buddy mentors and ideation mentor and which technology assign to perticular candidate if candidate id is 6 --
+
+ mysql> SELECT fellowship_candidate.First_Name,mentor.Name,mentor.Mentor_Type,tech_stack.Tech_Name FROM fellowship_candidate
+     -> JOIN mentor ON fellowship_candidate.Creator_User = mentor.Creator_User
+     -> JOIN tech_stack ON fellowship_candidate.Creator_User = tech_stack.Creator_User
+     -> WHERE fellowship_candidate.Id = 1006;
+ Empty set (0.01 sec)
+
